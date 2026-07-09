@@ -1,0 +1,212 @@
+# Essential Commands
+
+## Accessing Images and Image Collections
+
+### Accessing an Image and Viewing Information
+
+``` javascript
+// add a single image
+var image = ee.Image("image_name");
+
+//this will print information about the image in the console
+print(image);
+```
+
+### Accessing an Image Collection and Viewing Information
+
+``` javascript
+// add an image collection
+var image_collection = ee.ImageCollection("image_collection_name");
+
+//this will print information about the first image 
+//in the image collection in the console
+print(image_collection.first());
+```
+
+## Filtering Image Collections
+
+### Filter by a Date Range
+
+``` javascript
+// filter by a date
+var filtered_collection = image_collection.filterDate('2021-08-01', '2021-08-02');
+
+//filter by a set of dates
+var filtered_collection = image_collection.filterDate('2021-08-01', '2022-08-02');
+
+//filter by a year or set of years
+var filtered_collection = image_collection.filter(
+    ee.Filter.calendarRange(2021, 2023, 'year')
+);
+
+//filter by a month
+var filtered_collection = image_collection.filter(
+    ee.Filter.calendarRange(8, 8, 'month')
+);
+
+//filter by day of year
+var filtered_collection = image_collection.filter(
+    ee.Filter.dayOfYear(150, 200)
+);
+
+//filter by day of the month
+var filtered_collection = image_collection.filter(
+    ee.Filter.calendarRange(1, 15, 'day_of_month')
+);
+```
+
+### Filter by a Location
+
+Filter an image collection to images that intersect a geometry.
+
+``` javascript
+// Filter by a point (coordinates)
+var point = ee.Geometry.Point([-122.292, 37.901]);
+
+var filtered_collection = image_collection.filterBounds(point);
+```
+
+``` javascript
+// Filter by an ee.Geometry, ee.Feature, or ee.FeatureCollection
+//in this case roi needs to be an ee.Geometry or ee.FeatureCollection
+var filtered_collection = image_collection.filterBounds(roi);
+```
+
+### Filter by Metadata Properties
+
+For these, you need to reference the actual metadata to see what the variables are called
+
+``` javascript
+//cloud cover less than 10%
+var filtered_collection = image_collection.filter(
+    ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10)
+);
+
+//cloud cover greater than 10%
+var filtered_collection = image_collection.filter(
+    ee.Filter.gt('CLOUDY_PIXEL_PERCENTAGE', 10)
+);
+
+
+//cloud cover equal to 10%
+var filtered_collection = image_collection.filter(
+    ee.Filter.eq('CLOUDY_PIXEL_PERCENTAGE', 10)
+);
+
+//cloud cover between 10% and 20%
+var filtered_collection = image_collection.filter(
+    ee.Filter.and(
+        ee.Filter.gte('CLOUDY_PIXEL_PERCENTAGE', 10),
+        ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', 20)
+    )
+);
+```
+
+## Visualization
+
+### Visualizing a Single-Band Image
+
+``` javascript
+
+Map.addLayer(
+    image, //  image to display
+    {
+        bands: ['band_name'], //  band to display
+        min: min, //  display range  
+        max: max
+    },
+    'Layer Name' //  name to show in Layer Manager
+);
+```
+
+### Visualizing a Multi-Band Image
+
+``` javascript
+
+Map.addLayer(
+    image, //image to display
+    {
+        bands: ['SR_B3', 'SR_B2', 'SR_B1'], //bands will automatically fill RGB
+        min: min,
+        max: max
+    },
+    'Layer Name' //name to show in Layer Manager
+);
+```
+
+### Visualizing an Image Collection
+
+The `Map.addLayer` command expects a single image. To visualize an image collection you need to reduce it to a single image. The easiest way to do this is to take the median value for each pixel across the image collection. You can also use `mean()`, `max()`, or `min()` to reduce the image collection.
+
+``` javascript
+
+Map.addLayer(
+    image_collection.median(), //takes the median of the image collection
+    {
+        bands: ['SR_B3', 'SR_B2', 'SR_B1'], //bands will automatically fill RGB
+        min: min,
+        max: max
+    },
+    'Layer Name' //name to show in Layer Manager
+);
+```
+
+### Help Picking Min/Max
+
+An easy way to pick min/max values is to take a sample of the raster and use that to see percentile values
+
+``` javascript
+
+// for an image
+var stats = image.select('band')
+  .sample({
+    region: image.geometry(),
+    numPixels: 1000,
+    scale: 30
+  })
+  .reduceColumns({
+    reducer: ee.Reducer.percentile([2, 98]),
+    selectors: ['band']
+  });
+
+print(stats);
+
+
+// for an image collection
+var stats = image_collection.median().select('band')
+  .sample({
+    region: image_collection.first().geometry(),
+    numPixels: 1000,
+    scale: 30
+  })
+  .reduceColumns({
+    reducer: ee.Reducer.percentile([2, 98]),
+    selectors: ['band']
+  });
+
+print(stats);
+```
+
+### Setting Color Palette for Single-Band Image
+
+Start by adding this [repo](https://code.earthengine.google.com/?accept_repo=users/gena/packages) to your GEE account. You can view all the palette options [here](https://github.com/gee-community/ee-palettes)
+
+``` javascript
+
+var palettes = require('users/gena/packages:palettes');
+
+Map.addLayer(
+    image, //  image to display
+    {
+        bands: ['band_name'], //  band to display
+        min: min, //  display range  
+        max: max,
+        palette: palettes.colorbrewer.RdYlGn[9] //set palette and number of classes
+    },
+    'Layer Name' //  name to show in Layer Manager
+);
+
+```
+
+
+

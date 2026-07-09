@@ -8,5 +8,55 @@
     "crumbs": [
       "Preface"
     ]
+  },
+  {
+    "objectID": "essential_commands.html",
+    "href": "essential_commands.html",
+    "title": "2  Essential Commands",
+    "section": "",
+    "text": "2.1 Accessing Images and Image Collections",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Essential Commands</span>"
+    ]
+  },
+  {
+    "objectID": "essential_commands.html#accessing-images-and-image-collections",
+    "href": "essential_commands.html#accessing-images-and-image-collections",
+    "title": "2  Essential Commands",
+    "section": "",
+    "text": "2.1.1 Accessing an Image and Viewing Information\n// add a single image\nvar image = ee.Image(\"image_name\");\n\n//this will print information about the image in the console\nprint(image);\n\n\n2.1.2 Accessing an Image Collection and Viewing Information\n// add an image collection\nvar image_collection = ee.ImageCollection(\"image_collection_name\");\n\n//this will print information about the first image \n//in the image collection in the console\nprint(image_collection.first());",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Essential Commands</span>"
+    ]
+  },
+  {
+    "objectID": "essential_commands.html#summarizing-image-collections",
+    "href": "essential_commands.html#summarizing-image-collections",
+    "title": "2  Essential Commands",
+    "section": "2.3 Summarizing Image Collections",
+    "text": "2.3 Summarizing Image Collections\n\n2.3.1",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Essential Commands</span>"
+    ]
+  },
+  {
+    "objectID": "essential_commands.html#visualization",
+    "href": "essential_commands.html#visualization",
+    "title": "2  Essential Commands",
+    "section": "2.3 Visualization",
+    "text": "2.3 Visualization\n\n2.3.1 Visualizing a Single-Band Image\n\nMap.addLayer(\n    image, //  image to display\n    {\n        bands: ['band_name'], //  band to display\n        min: min, //  display range  \n        max: max\n    },\n    'Layer Name' //  name to show in Layer Manager\n);\n\n\n2.3.2 Visualizing a Multi-Band Image\n\nMap.addLayer(\n    image, //image to display\n    {\n        bands: ['SR_B3', 'SR_B2', 'SR_B1'], //bands will automatically fill RGB\n        min: min,\n        max: max\n    },\n    'Layer Name' //name to show in Layer Manager\n);\n\n\n2.3.3 Visualizing an Image Collection\nThe Map.addLayer command expects a single image. To visualize an image collection you need to reduce it to a single image. The easiest way to do this is to take the median value for each pixel across the image collection. You can also use mean(), max(), or min() to reduce the image collection.\n\nMap.addLayer(\n    image_collection.median(), //takes the median of the image collection\n    {\n        bands: ['SR_B3', 'SR_B2', 'SR_B1'], //bands will automatically fill RGB\n        min: min,\n        max: max\n    },\n    'Layer Name' //name to show in Layer Manager\n);\n\n\n2.3.4 Help Picking Min/Max\nAn easy way to pick min/max values is to take a sample of the raster and use that to see percentile values\n\n// for an image\nvar stats = image.select('band')\n  .sample({\n    region: image.geometry(),\n    numPixels: 1000,\n    scale: 30\n  })\n  .reduceColumns({\n    reducer: ee.Reducer.percentile([2, 98]),\n    selectors: ['band']\n  });\n\nprint(stats);\n\n\n// for an image collection\nvar stats = image_collection.median().select('band')\n  .sample({\n    region: image_collection.first().geometry(),\n    numPixels: 1000,\n    scale: 30\n  })\n  .reduceColumns({\n    reducer: ee.Reducer.percentile([2, 98]),\n    selectors: ['band']\n  });\n\nprint(stats);\n\n\n2.3.5 Setting Color Palette for Single-Band Image\nStart by adding this repo to your GEE account. You can view all the palette options here\n\nvar palettes = require('users/gena/packages:palettes');\n\nMap.addLayer(\n    image, //  image to display\n    {\n        bands: ['band_name'], //  band to display\n        min: min, //  display range  \n        max: max,\n        palette: palettes.colorbrewer.RdYlGn[9] //set palette and number of classes\n    },\n    'Layer Name' //  name to show in Layer Manager\n);",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Essential Commands</span>"
+    ]
+  },
+  {
+    "objectID": "essential_commands.html#filtering-image-collections",
+    "href": "essential_commands.html#filtering-image-collections",
+    "title": "2  Essential Commands",
+    "section": "2.2 Filtering Image Collections",
+    "text": "2.2 Filtering Image Collections\n\n2.2.1 Filter by a Date Range\n// filter by a date\nvar filtered_collection = image_collection.filterDate('2021-08-01', '2021-08-02');\n\n//filter by a set of dates\nvar filtered_collection = image_collection.filterDate('2021-08-01', '2022-08-02');\n\n//filter by a year or set of years\nvar filtered_collection = image_collection.filter(\n    ee.Filter.calendarRange(2021, 2023, 'year')\n);\n\n//filter by a month\nvar filtered_collection = image_collection.filter(\n    ee.Filter.calendarRange(8, 8, 'month')\n);\n\n//filter by day of year\nvar filtered_collection = image_collection.filter(\n    ee.Filter.dayOfYear(150, 200)\n);\n\n//filter by day of the month\nvar filtered_collection = image_collection.filter(\n    ee.Filter.calendarRange(1, 15, 'day_of_month')\n);\n\n\n2.2.2 Filter by a Location\nFilter an image collection to images that intersect a geometry.\n// Filter by a point (coordinates)\nvar point = ee.Geometry.Point([-122.292, 37.901]);\n\nvar filtered_collection = image_collection.filterBounds(point);\n// Filter by an ee.Geometry, ee.Feature, or ee.FeatureCollection\n//in this case roi needs to be an ee.Geometry or ee.FeatureCollection\nvar filtered_collection = image_collection.filterBounds(roi);\n\n\n2.2.3 Filter by Metadata Properties\nFor these, you need to reference the actual metadata to see what the variables are called\n//cloud cover less than 10%\nvar filtered_collection = image_collection.filter(\n    ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 10)\n);\n\n//cloud cover greater than 10%\nvar filtered_collection = image_collection.filter(\n    ee.Filter.gt('CLOUDY_PIXEL_PERCENTAGE', 10)\n);\n\n\n//cloud cover equal to 10%\nvar filtered_collection = image_collection.filter(\n    ee.Filter.eq('CLOUDY_PIXEL_PERCENTAGE', 10)\n);\n\n//cloud cover between 10% and 20%\nvar filtered_collection = image_collection.filter(\n    ee.Filter.and(\n        ee.Filter.gte('CLOUDY_PIXEL_PERCENTAGE', 10),\n        ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', 20)\n    )\n);",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Essential Commands</span>"
+    ]
   }
 ]

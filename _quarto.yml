@@ -9,10 +9,8 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
-    - summary.qmd
-    - references.qmd
+    - essential_commands.qmd
 
-bibliography: references.bib
 
 format:
   html:
