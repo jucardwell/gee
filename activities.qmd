@@ -104,7 +104,7 @@ var filtered_collection = image_collection.filter(
 
 ## Visualization
 
-### Visualizing a Single-Band
+### Visualizing a Single-Band Image
 
 ``` javascript
 
@@ -119,7 +119,7 @@ Map.addLayer(
 );
 ```
 
-### Visualizing a Multi-Band
+### Visualizing a Multi-Band Image
 
 ``` javascript
 
@@ -218,127 +218,12 @@ Map.addLayer(
         bands: ['band_name'], //  band to display
         min: min, //  display range  
         max: max,
-        palette: ['blue', 'white', 'green'] //set palette manually
+        palette: palette: ['blue', 'white', 'green'] //set palette manually
     },
     'Layer Name' //  name to show in Layer Manager
 );
 
 
-```
-
-## Selecting Bands
-
-### Select Bands
-
-```javascript
-
-// select a single band
-var band = image.select('band_name');
-
-
-// select multiple bands
-var bands = image.select(['band_1', 'band_2', 'band_3']);
-```
-
-### Rename Bands
-
-```javascript
-
-// rename a band
-var renamed = image.select('old_band_name').rename('new_band_name');
-
-```
-
-## Band Math
-
-Band math allows you to create new raster bands by mathematically combining existing bands. Common operations include addition, subtraction, multiplication, division, and normalized differences.
-
-### Basic Mathematical Operations
-
-```javascript
-// select individual bands 
-
-var band_1 = image.select('band_1'); 
-var band_2 = image.select('band_2'); 
-
-// add two bands 
-var added = band_1.add(band_2); 
-
-// subtract
-var subtracted = band_1.subtract(band_2);
-
-// multiply two bands 
-var multiplied = band_1.multiply(band_2); 
-
-// divide 
-var divided = band_1.divide(band_2);
-
-//built in normalized difference function
-
-var normalized_difference = image.normalizedDifference(['band_1', 'band_2'])
-
-```
-
-### Using Expressions
-Expressions can be used for more complicated operations
-
-```javascript
-
-var calculated_band = image.expression( 
-                    '(BAND_1 - BAND_2) / (BAND_1 + BAND_2)', 
-                    { BAND_1: image.select('band_1'), 
-                    BAND_2: image.select('band_2') });
-
-```
-
-
-## Thresholds, Reclassifying, and Masking
-
-### Threshold
-
-```javascript
-
-// greater than a threshold
-var thresholded = image.gt(threshold);
-
-// greater than or equal to a threshold
-var thresholded = image.gte(threshold);
-
-// less than a threshold
-var thresholded = image.lt(threshold);
-
-// less than or equal to a threshold
-var thresholded = image.lte(threshold);
-
-// equal to a threshold
-var thresholded = image.eq(threshold);
-
-```
-
-### Reclassifying
-
-```javascript
-
-// create multiple classes
-var reclassified = image
-    .where(image.lt(threshold_1), value_1)
-    .where(
-        image.gte(threshold_1)
-            .and(image.lt(threshold_2)),
-        value_2
-    )
-    .where(image.gte(threshold_2), value_3);
-
-```
-
-### Masking
-
-```javascript
-// create a mask
-var mask = image.gt(threshold);
-
-// apply the mask
-var masked_image = image.updateMask(mask);
 ```
 
 

@@ -1,0 +1,777 @@
+# Tutorials
+
+## Tutorial 1: Introduction to Javascript
+
+This tutorial will introduce you to the basics of scripting in the GEE Environment.
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+``` javascript
+//Welcome to the Google Earth Engine Code Editor!
+//In this course, we will be coding in JavaScript
+//This exercise will introduce you to the basics of
+//scripting in the GEE environment. 
+
+//Any line with "//" before it is a comment, which means
+//that those lines with not "run".
+
+//Comments are used to keep track of what different commands
+//are doing. You should include a descriptive comment
+//above each line of code
+
+//It is good luck to print "Hello, World" whenever you are
+//learning a new programming language. Fill in the 
+//print command below and click "Run" using the button at the top of the script
+// Notice that this code executes into the "console" on the right. 
+
+// A ; should be placed after each line of code. GEE will
+//allow code to run without it, but it is best practice.
+
+print("");
+
+
+//Now we are really ready to get started.
+
+
+//The first important thing to learn is how to create a 
+//variable. In JavaScript you must "declare" variables 
+//using the following syntax
+
+//var BLANK =    ;
+
+
+//Variables can be made up of all sorts of things, but 
+//the simplest variables are usually "string" or "numeric" 
+//variables. 
+
+//Text strings must be contained within quotations
+
+// var BLANK = "TEXT";
+
+
+//Below, create the string "North Carolina" and assign it 
+// to a variable named "state"
+
+
+//Now click run. You will notice that nothing is printed
+//to your console for the "state" variable. Uncomment
+// the command below and re-run the script
+
+//print(state);
+
+
+//Without the print command, the "state" variable is still
+//created, but there is not any output. Print commands
+//are used often to check progress on code or to explore
+//images and image collections (which we will learn about later)
+
+
+//numeric variables should not be contained in quotes
+
+//create a numeric variable called "state_population" and 
+//assign the value 10439388 (2020 census population of NC)
+
+
+//print the "state_population" variable
+
+
+//sometimes you want to include multiple values in a 
+//single variable. This is called a list and it looks like 
+
+// var list = [VALUE, VALUE, VALUE, VALUE];
+
+//create a list called "cities" that holds the values Raleigh,
+//Charlotte, Asheville, and Wilmington. Remember that 
+// strings need to be in quotes. Print the "cities" list
+
+
+//Objects allow you to hold multiple values in a "key"- "value"
+//pair and look like 
+
+//uncomment the lines of code below by pressing "command" and "slash"
+
+// var raleigh_data = {
+//            "city" : "Raleigh",
+//            "coordinates" : [-78.644257, 35.787743],
+//            "population" : 476587} ; 
+
+
+//you can access the whole object by
+//print(raleigh_data);
+
+//you can also access a single part of an object like
+//print(raleigh_data.population);
+                      
+
+//create your own sample object below
+
+
+//now print a part of the object here
+```
+## Tutorial 2: Introduction to GEE API
+
+This tutorial will introduce you to the basics of GEE's API and how to use server-side functions.
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+// Google Earth Engine's code editor allows us to access the 
+//Earth Engine API. The Earth Engine API is very powerful and 
+//contains methods to do most everything we would want to do in 
+//terms of image processing and analysis
+
+//Click on the "Docs" tab to the right. This documents all of the 
+//available functions in the Earth Egnine API. 
+
+//the API functions have the prefix ee (for Earth Engine)
+
+//API functions are "server-side" meaning that the processing
+//will take place on Google's servers, as opposed to your
+//local computer (client-side).
+
+//Much of the power of Earth Engine is the ability to use Google's servers
+//for processing. Therefore, we should be using "server-side" 
+//functions as much as possible. 
+
+
+//Let's look at a simple example. We can do basic arithmetic 
+//on the server-side or the client side. 
+
+//The client side looks like this
+var client = 2 + 2;
+print(client);
+
+//The server side uses an API function and looks like this
+var server = ee.Number(2).add(2);
+print(client);
+
+//The client side looks a little simpler, and in this example, they
+//work at a similar speed. But for advanced processing, server-side
+//functions are the only way to achieve something. It is best
+//practice to get used to using server-side functions. 
+
+// Now, let's explore more common server-side functions.
+
+// Math Operations
+// We can perform many other math operations using server-side functions
+
+var num1 = ee.Number(10);
+var num2 = ee.Number(5);
+
+var addition = num1.add(num2);
+var subtraction = num1.subtract(num2);
+var multiplication = num1.multiply(num2);
+var division = num1.divide(num2);
+
+print(addition);
+print(subtraction);
+print(multiplication);
+print(division);
+
+// Logical Operations
+// We can also perform logical operations
+
+var isEqual = num1.eq(num2);
+var isGreater = num1.gt(num2);
+var isLess = num1.lt(num2);
+
+print(isEqual);
+print(isGreater);
+print(isLess);
+
+// Lists
+// we can create lists on the server-side by adding the ee. 
+//before the list function
+
+var numbers = ee.List([1, 2, 3, 4, 5]);
+print(numbers);
+
+// Reduce a list
+// Let's find the sum of the numbers in the list
+var sum = numbers.reduce(ee.Reducer.sum());
+print(sum);
+
+//Sort a list in ascending and descending order.
+var unsortedList = ee.List([10, 2, 30, 5, 7]);
+var sortedListAsc = unsortedList.sort();
+print(sortedListAsc);
+
+
+// Filter elements in a list based on a condition.
+var filteredList = unsortedList.filter(ee.Filter.gt('item', 5));
+print(filteredList);
+
+// Count the number of elements in a list.
+var countElements = unsortedList.size();
+print("Number of elements:", countElements);
+
+
+//Server-side function practice
+// First, create a list of 10 numbers
+
+//1. Write a command to find and print the maximum value in the list
+
+
+//2. Write a command to sum the numbers in the list
+
+
+//3. Write a command to filter the list to only numbers under a certain
+//value
+
+//4. Write a command to count how many elements are in the 
+//filtered list. 
+
+
+//Scripting for GEE uses JavaScript, but you do not need to be
+//an expert in JavaScript to use it. Instead, we use JavaScript
+//largely to access the API, where we are using server-side 
+//functions to accomplish what we want to.
+```
+
+## Tutorial 3: Introduction to Images and Image Collections
+
+This tutorial will introduce you to Images and Image Collections, the fundamental data type in Google Earth Engine. 
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+// An ee.Image is a single satellite image or other raster dataset.
+// An ee.ImageCollection is a collection of ee.Images.
+// It often represents all images from a particular satellite or dataset,
+// which can then be filtered by location, date, or other properties.
+
+//Here is your first image!!!
+//when you run this code, it will load the image, but we won't see anything
+var firstImage = ee.Image('LANDSAT/LC09/C02/T1_L2/LC09_016035_20260510');
+
+
+//to get information about the image, use the print command
+//print(firstImage);
+
+//by printing, you can get information about the bands available in the
+//image, as well as the image properties
+
+//how many bands are in the image? 
+
+//what is the cloud cover of the image? 
+
+//when was the image taken? (this is a hard one)
+
+//can you figure out an EASIER way to figure out the date of the image? 
+//hint, look at the name of the image
+
+
+//That image came from an Image Collection of all LANDSAT9 images. 
+//visit the link below to see the Image Collection in the data catalog, which
+//can give you a bunch of information about the collection before
+//even adding it to GEE
+
+//https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC09_C02_T1_L2
+
+//note that the collection name is just the first part of our firstImage
+var firstCollection = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
+
+
+//try printing our collection, what happens? 
+
+
+//we can't print image collections that are too large. Let's start by
+//looking at a smaller set of images. You'll learn a lot more about filtering later
+//so don't worry now
+
+var filteredCollection = firstCollection.filterDate('2025-08-01', '2025-08-05');
+
+// how many images are in our filtered collection?
+
+
+//what is the image name of the 28th feature in the collection? 
+
+
+//how much cloud coverage is there in the 124 feature in the collection? 
+
+
+```
+
+## Tutorial 4: Visualizing Single Bands
+
+This tutorial will introduce you to visualizing a single band in GEE
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+
+//Creating appropriate visualizations in Google Earth Engine
+//is one of the most important skills that we can learn. 
+
+//There are different visualization practices for single vs. multi-band
+//images. Today, we are going to focus on single-band images. 
+
+var image = ee.Image('CGIAR/SRTM90_V4');
+
+//to add an image to the map, we use the following command
+Map.addLayer(image);
+
+
+//You're probably staring at a gray screen. That's not very helpful,
+//is it. 
+
+//let's add a minimum and maximum value
+Map.addLayer(image, {min: 0, max:250});
+
+
+//can you figure out what this data might be showing? 
+//visit the data catalog to get some more information
+//https://www.google.com/search?q=CGIAR%2FSRTM90_V4&oq=CGIAR%2FSRTM90_V4&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIHCAIQABjvBTIHCAMQABjvBTIKCAQQABiiBBiJBTIHCAUQABjvBTIGCAYQRRg60gEHMTg3ajBqN6gCALACAA&sourceid=chrome&source=chrome.ob&ie=UTF-8
+
+
+//Open up the Layers tab. There should be two images in there. Click the first
+//image off. That was the first image we added without any visualization parameters
+
+
+//Using the selection bar next to the second image, lower the opacity to see
+//the basemap
+
+
+//Zoom out to the whole US. This visualization looks okay, but
+//not great, especially if you zoom into an area like Chapel Hill.
+
+//Use the Inspector tab to click around Chapel Hill and see the pixel values
+
+//Modify the min and max to make sense for Chapel Hill. 
+
+//Greyscale is ok, but we might want to use some colors to 
+//better distinguish patterns. 
+
+//Palettes let you add color to single-band images.
+//Here is an example of how to use a palette
+//Map.addLayer(image, {min: 0, max: 3000, palette: ['blue', 'green', 'red']});
+
+//add a palette to the command you wrote above for Chapel Hill. 
+
+//Colors can be referenced by name, or by HEX code. Visit this
+//site for information on colors 
+//https://en.wikipedia.org/wiki/Web_colors
+
+
+//Create a new 4 color palette and re-visualize your data with it
+
+```
+
+## Tutorial 5: Visualizing a Multi-Band Image
+
+This tutorial will introduce you to visualizing a multi-band image in GEE
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+
+//Visualizing a multi-band image requires a couple more steps than a single band image
+
+//The image below is a Landsat 8 image.
+var image = ee.Image("LANDSAT/LC08/C02/T1_L2/LC08_016035_20240325");
+
+
+//How many bands are there in this image?
+
+//To visualize a multiband image, the first thing you need to 
+// do is decide what bands to visualize. 
+
+
+//Uncomment the line below. This will visualize the image in a
+//"true color" composite
+//Map.addLayer( image, { bands: ['SR_B4', 'SR_B3', 'SR_B2']}  )
+
+
+//You will notice that the image is very dark. We need to set
+//appropriate min and max values. 
+//Here is a code snippet that I use to help me pick min/max vlaues
+//It samples 1000 pixels in the dataset
+//and finds the 2nd and 98th percentile, which I use for the min and max
+//You can any of the bands. 
+
+
+// var stats = image.select('SR_B4')
+//   .sample({
+//     region: image.geometry(),
+//     numPixels: 1000,
+//     scale: 30
+//   })
+//   .reduceColumns({
+//     reducer: ee.Reducer.percentile([2, 98]),
+//     selectors: ['SR_B4']
+//   });
+
+// print(stats);
+
+//using the values from the command above, modify the visualization
+//script by adding a min and max
+
+
+//the bands selected will automatically map to the Red, Green, and Blue
+//values for the pixel. 
+
+//select three other bands from the dataset (by printing metadata)
+//change your visualization to use those three bands. 
+//What does the image look like? 
+
+```
+
+## Tutorial 6: Filtering Image Collections
+
+This tutorial will introduce you to filtering image collections by date, location, or metadata property
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+//A major pre-processing task that we need to do for image collections 
+//is filter based on time, location, or metadata properties
+
+//let's start with the Landsat9 image collection
+var dataset = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2');
+
+//we can filter by a date or set of dates using the following command
+var filter1 = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2').filterDate('2026-01-01', '2026-01-10');
+//print the image collection. How many images are there? 
+
+
+//we can filter by a location two different ways. 
+//we can define a lat/lon
+var chapelHill = ee.Geometry.Point([-79.039, 35.9262]);
+
+var filter2 = dataset.filterBounds(chapelHill);
+//How many images are there? 
+
+//we can also add geometry to filter by using the map interface
+//click the point button at the top left of the map and add a point 
+//in Greenville, NC
+
+//see that it adds the geometry to the top tab of our script. 
+//This is our "Import" area, which we'll use more in the future
+
+//change the name from geometry to greenville and filter the image collection
+//to images that cover greenville. 
+//How many images are there? 
+
+
+//finally, we can filter by metadata properties. A super common
+//filter is to filter to low cloud images
+var filter4 = dataset.filter(
+    ee.Filter.lt('CLOUD_COVER', 10)
+);
+
+
+//we can also stack filters
+
+var stackedFilter = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
+                      .filterBounds(chapelHill)
+                      .filter(ee.Filter.lt('CLOUD_COVER', 10));
+                      
+
+//how many images cover greenville and have a cloud cover of less than 5%?
+
+```
+
+## Tutorial 7: Mosaics and Composites
+
+This tutorial will introduce you to creating Mosaics and Composites in GEE
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+//Compositing and mosaicing are important tools for image analysis
+//compositing involves combining spatially overlapping images
+//in an image collection into a single image, using an aggregation
+//function
+
+
+//mosaicking involves combining non spatially-overlapping images
+//into a single image
+
+
+//Write two commands that add the following images to the map and zoom 
+//into Chapel Hill
+
+var ch_naip_1 = ee.Image("USDA/NAIP/DOQQ/n_3507908_se_17_2_20050621")
+var ch_naip_2 = ee.Image("USDA/NAIP/DOQQ/n_3507908_sw_17_2_20050621")
+3
+
+//As you can see, these separate images are spatially continuous.
+//We can use a mosaic to combine them into a single image
+//fill in the command below with the correct image names
+//var mosaic = ee.ImageCollection([IMAGE1, IMAGE2]).mosaic();
+
+
+//Add the mosaicked image to the map
+
+
+//Compositing involves selecting an aggregation function to 
+//turn an image collection into a single summary image. 
+
+// Load all NAIP images for Carrboro
+var carrboro_naip = ee.ImageCollection('USDA/NAIP/DOQQ')
+  .filterBounds(ee.Geometry.Point(-79.0873, 35.9147))
+  .select(['R', 'G', 'B']);
+
+// Temporally composite the images with a maximum value function.
+var composite = carrboro_naip.max();
+
+
+//add the composite image to the map
+
+
+//now make a composite that uses the mean instead of the max and 
+//add that to the map. Can you notice any differences?
+
+```
+
+## Tutorial 8: False Color Visualizations
+
+This tutorial will introduce you to creating Mosaics and Composites in GEE
+
+To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
+```javascript
+
+//so far, we have only worked with "Natural Color" visualizations, which means that we 
+//map the RGB for the image to the Red, Green, and Blue bands on the satellite.
+
+//For instance, here is a Sentinel-2 Image of Chapel Hill
+var image = ee.Image('COPERNICUS/S2_SR_HARMONIZED/20260313T160041_20260313T160757_T17SPV')
+
+//natural color visualization
+Map.addLayer(
+    image, 
+    {
+        bands: ['B4', 'B3', 'B2'], 
+        min: 160,
+        max: 2200
+    },
+    'Sentinel-2 Image of CH' 
+);
+
+//However, there are actually many more bands in the image. We can assign bands other
+//than RGB to the RBG values of the visualization. This is called a False-Color Visualization
+
+//There are many different sets of combinations of bands that are designed to help us visualize
+//different things. 
+
+
+//For instance, using the near infrared band ,red, and green band can assess plant density 
+Map.addLayer(
+    image, 
+    {
+        bands: ['B8', 'B4', 'B3'], 
+        min: 160,
+        max: 2200
+    },
+    'Vegetation' 
+);
+
+//What can you learn about the CH area from this visualization that you can't
+//see in the natural color? 
+
+//Using the SWIR-1, near infrared, and blue bands can assess agricultural health 
+Map.addLayer(
+    image, 
+    {
+        bands: ['B11', 'B8', 'B2'], 
+        min: 160,
+        max: 2200
+    },
+    'Agriculture' 
+);
+
+//What can you learn about the CH area from this visualization that you can't
+//see in the natural color? 
+
+//Using the SWIR-1,SWIR-2, and blue bands can find geological features
+Map.addLayer(
+    image, 
+    {
+        bands: ['B12', 'B11', 'B2'], 
+        min: 160,
+        max: 2200
+    },
+    'Geology' 
+);
+
+//What can you learn about the CH area from this visualization that you can't
+//see in the natural color? 
+
+```
+
+## Tutorial 9: Spectral Indices, Thresholding, and Masking
+
+```javascript
+
+// In the previous tutorial, we learned how to create false-color composites
+// using different Sentinel-2 bands to visualize features around Chapel Hill.
+
+// While visualizations help us visually interpret satellite imagery, we often need
+// quantitative measurements to analyze the landscape.
+
+// Spectral indices allow us to mathematically combine different spectral bands
+// to highlight specific land surface characteristics, such as vegetation,
+// water, or burned areas.
+
+
+//Remember our vegetation visualization
+var image = ee.Image('COPERNICUS/S2_SR_HARMONIZED/20260313T160041_20260313T160757_T17SPV')
+
+Map.addLayer(
+    image, 
+    {
+        bands: ['B8', 'B4', 'B3'], 
+        min: 160,
+        max: 2500
+    },
+    'Vegetation' 
+);
+
+// In this false-color composite, healthy vegetation appears dark red because the
+// near-infrared (NIR) band is displayed in the red channel. Since healthy vegetation
+// reflects a large amount of NIR light, it stands out as shades of red.
+
+
+//But what if we wanted to represent vegetation health mathematically? 
+// We can use GEEs band math, where we combine multiple spectral bands using mathematical
+// formulas to highlight specific land surface characteristics.
+
+// One of the most widely used spectral indices is the Normalized Difference
+// Vegetation Index (NDVI). NDVI compares the near-infrared (NIR) and red bands
+// to estimate the presence and health of vegetation.
+
+// Extract the near infrared and red bands.
+var nir = image.select('B8');
+var red = image.select('B4');
+
+// Calculate the numerator and the denominator using subtraction and addition respectively.
+var numerator = nir.subtract(red);
+var denominator = nir.add(red);
+
+// Now calculate NDVI.
+var ndvi = numerator.divide(denominator);
+
+// Add the layer to our map with a palette.
+Map.addLayer(ndvi, {
+    min: -1,
+    max: 1,
+    palette: ['red', 'white', 'green']
+}, 'NDVI Manual');
+
+
+//What NDVI values represent high vegetation? Which values represent low vegetation?
+
+//Normalized differences like NDVI are so common in remote sensing that Earth Engine 
+//provides the ability to do that particular sequence of subtraction, addition, and division 
+//in a single step, using the normalizedDifference method.
+
+// Now use the built-in normalizedDifference function to achieve the same outcome.
+var ndviND = image.normalizedDifference(['B8', 'B4']);
+Map.addLayer(ndviND, {
+    min: -1,
+    max: 1,
+    palette: ['red', 'white', 'green']
+}, 'NDVI normalizedDiff');
+
+//NDVI gives us a continuous value of vegetation
+//let's say that we want to categorize our data into highly vegetated and not highly vegetated
+//to do this, we can use a threshold
+
+
+//for instance, let's say that over .7 is highly vegetated. 
+
+// Implement a threshold
+//this will set anything above .7 as 1 and anything below as 0
+var chVeg = ndviND.gt(0.7);
+
+Map.addLayer(chVeg,
+    {
+        min: 0,
+        max: 1,
+        palette: ['white', 'green']
+    },
+    'Highly Vegetated');
+    
+// So far, we've used a threshold to divide our NDVI image into two classes:
+// highly vegetated (1) and not highly vegetated (0).
+
+// While binary classification is useful, we often want to classify an image
+// into more than two categories. For example, we might want to identify
+// areas with low, moderate, and high vegetation.
+
+// We can do this using the .where() method.
+//
+// Rather than hiding pixels, .where() changes the value of pixels that
+// satisfy a condition. By applying multiple .where() statements, we can
+// build a classified image with several categories.
+
+// Create a starting image where every pixel has a value of 1.
+// This will represent areas with moderate vegetation.
+var ndviClasses = ee.Image(1)
+    .clip(ndviND.geometry());
+
+// Assign pixels with NDVI values less than or equal to 0.3 to class 0.
+ndviClasses = ndviClasses.where(ndviND.lte(0.3), 0);
+
+// Assign pixels with NDVI values greater than or equal to 0.7 to class 2.
+ndviClasses = ndviClasses.where(ndviND.gte(0.7), 2);
+
+// Pixels with NDVI values between 0.3 and 0.7 remain class 1.
+
+// Display the classified NDVI image.
+Map.addLayer(ndviClasses,
+    {
+        min: 0,
+        max: 2,
+        palette: ['brown', 'yellow', 'green']
+    },
+    'Low, Moderate, High NDVI');
+
+
+// Now suppose we only want to keep the highly vegetated areas.
+//
+// updateMask() uses another image (called a mask) to decide which pixels
+// should remain visible.
+//
+// The mask (chVeg) contains:
+//   1 = keep this pixel
+//   0 = hide this pixel
+//
+// Since chVeg was created with ndviND.gt(0.7), only pixels with
+// NDVI values greater than 0.7 have a value of 1.
+//
+// Applying updateMask(chVeg) keeps those pixels and hides all others.
+// The NDVI values themselves do NOT change, only which pixels are displayed
+// and included in later analyses.
+
+var masked = ndviND.updateMask(chVeg);
+
+Map.addLayer(masked,
+  {
+    min: 0,
+    max: 1,
+    palette: ['white', 'green']
+  },
+  'NDVI > 0.7');
+
+
+//Another common spectral indice is the Normalized Difference Built-Up Index (NDBI)
+//For Sentinel-2, it is the normalized difference between band 11 (SWIR) and band 8 (NIR)
+
+//Calculate NDBI using the normalizedDifference() method. 
+//Display the NDBI image using an appropriate color palette.
+//Create a threshold that identifies pixels with NDBI values greater than 0.
+//Display your thresholded image.
+
+// Where are the highest NDBI values located?
+//How do these locations compare to the highly vegetated areas identified with NDVI?
+
+
+// Create a three-class NDBI image using .where().
+//
+// Assign: 0 = NDBI <= 0, 1 = 0 < NDBI < 0.2, 2 = NDBI >= 0.2
+//
+// Experiment with different thresholds and compare the results
+
+```
