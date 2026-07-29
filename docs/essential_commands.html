@@ -219,6 +219,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#threshold" id="toc-threshold" class="nav-link" data-scroll-target="#threshold"><span class="header-section-number">2.6.1</span> Threshold</a></li>
   <li><a href="#reclassifying" id="toc-reclassifying" class="nav-link" data-scroll-target="#reclassifying"><span class="header-section-number">2.6.2</span> Reclassifying</a></li>
   <li><a href="#masking" id="toc-masking" class="nav-link" data-scroll-target="#masking"><span class="header-section-number">2.6.3</span> Masking</a></li>
+  <li><a href="#clipping-images" id="toc-clipping-images" class="nav-link" data-scroll-target="#clipping-images"><span class="header-section-number">2.6.4</span> Clipping Images</a></li>
+  </ul></li>
+  <li><a href="#image-composites" id="toc-image-composites" class="nav-link" data-scroll-target="#image-composites"><span class="header-section-number">2.7</span> Image Composites</a></li>
+  <li><a href="#mapping-functions-over-image-collections" id="toc-mapping-functions-over-image-collections" class="nav-link" data-scroll-target="#mapping-functions-over-image-collections"><span class="header-section-number">2.8</span> Mapping Functions Over Image Collections</a>
+  <ul class="collapse">
+  <li><a href="#defining-a-function" id="toc-defining-a-function" class="nav-link" data-scroll-target="#defining-a-function"><span class="header-section-number">2.8.1</span> Defining a Function</a></li>
+  <li><a href="#map-a-function" id="toc-map-a-function" class="nav-link" data-scroll-target="#map-a-function"><span class="header-section-number">2.8.2</span> Map a Function</a></li>
+  <li><a href="#reduce-image-by-region" id="toc-reduce-image-by-region" class="nav-link" data-scroll-target="#reduce-image-by-region"><span class="header-section-number">2.8.3</span> Reduce Image by Region</a></li>
+  </ul></li>
+  <li><a href="#exporting-data" id="toc-exporting-data" class="nav-link" data-scroll-target="#exporting-data"><span class="header-section-number">2.9</span> Exporting Data</a>
+  <ul class="collapse">
+  <li><a href="#export-an-image" id="toc-export-an-image" class="nav-link" data-scroll-target="#export-an-image"><span class="header-section-number">2.9.1</span> Export an Image</a></li>
+  <li><a href="#export-a-feature-collection" id="toc-export-a-feature-collection" class="nav-link" data-scroll-target="#export-a-feature-collection"><span class="header-section-number">2.9.2</span> Export a Feature Collection</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -436,8 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">palette</span><span class="op">:</span> [<span class="st">'blue'</span><span class="op">,</span> <span class="st">'white'</span><span class="op">,</span> <span class="st">'green'</span>] <span class="co">//set palette manually</span></span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Layer Name'</span> <span class="co">//  name to show in Layer Manager</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
 <section id="selecting-bands" class="level2" data-number="2.4">
@@ -535,6 +547,86 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">// apply the mask</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> masked_image <span class="op">=</span> image<span class="op">.</span><span class="fu">updateMask</span>(mask)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="clipping-images" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="clipping-images"><span class="header-section-number">2.6.4</span> Clipping Images</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> clipped <span class="op">=</span> image<span class="op">.</span><span class="fu">clip</span>(roi)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="image-composites" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="image-composites"><span class="header-section-number">2.7</span> Image Composites</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// median composite</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> composite <span class="op">=</span> image_collection<span class="op">.</span><span class="fu">median</span>()<span class="op">;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">// mean composite</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> composite <span class="op">=</span> image_collection<span class="op">.</span><span class="fu">mean</span>()<span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">// minimum value composite</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> composite <span class="op">=</span> image_collection<span class="op">.</span><span class="fu">min</span>()<span class="op">;</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">// maximum value composite</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> composite <span class="op">=</span> image_collection<span class="op">.</span><span class="fu">max</span>()<span class="op">;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co">// sum composite</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> composite <span class="op">=</span> image_collection<span class="op">.</span><span class="fu">sum</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="mapping-functions-over-image-collections" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="mapping-functions-over-image-collections"><span class="header-section-number">2.8</span> Mapping Functions Over Image Collections</h2>
+<section id="defining-a-function" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="defining-a-function"><span class="header-section-number">2.8.1</span> Defining a Function</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> function_name <span class="op">=</span> <span class="kw">function</span>(image){</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//perform operations here</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> image<span class="op">;</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="map-a-function" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="map-a-function"><span class="header-section-number">2.8.2</span> Map a Function</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> processed_collection <span class="op">=</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    image_collection<span class="op">.</span><span class="fu">map</span>(function_name)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="reduce-image-by-region" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="reduce-image-by-region"><span class="header-section-number">2.8.3</span> Reduce Image by Region</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> projection <span class="op">=</span> image<span class="op">.</span><span class="fu">projection</span>()<span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> output <span class="op">=</span> image<span class="op">.</span><span class="fu">reduceRegions</span>({</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">collection</span><span class="op">:</span> feature_collection<span class="op">,</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">reducer</span><span class="op">:</span> ee<span class="op">.</span><span class="at">Reducer</span><span class="op">.</span><span class="fu">mean</span>()<span class="op">,</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">scale</span><span class="op">:</span> projection<span class="op">.</span><span class="fu">nominalScale</span>()<span class="op">,</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">crs</span><span class="op">:</span> projection</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="exporting-data" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="exporting-data"><span class="header-section-number">2.9</span> Exporting Data</h2>
+<section id="export-an-image" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="export-an-image"><span class="header-section-number">2.9.1</span> Export an Image</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">//get the image projection</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> projection <span class="op">=</span> image<span class="op">.</span><span class="fu">projection</span>()<span class="op">;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">//get the pixel size</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> scale <span class="op">=</span> projection<span class="op">.</span><span class="fu">nominalScale</span>()<span class="op">;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">//export the image</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>Export<span class="op">.</span><span class="at">image</span><span class="op">.</span><span class="fu">toDrive</span>({</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">image</span><span class="op">:</span> image<span class="op">,</span> <span class="co">//image to export</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">description</span><span class="op">:</span> <span class="st">'File_Name'</span><span class="op">,</span> <span class="co">//name of the exported file</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">scale</span><span class="op">:</span> scale<span class="op">,</span> <span class="co">//pixel size</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fileFormat</span><span class="op">:</span> <span class="st">'GeoTIFF'</span> <span class="co">//output format</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="export-a-feature-collection" class="level3" data-number="2.9.2">
+<h3 data-number="2.9.2" class="anchored" data-anchor-id="export-a-feature-collection"><span class="header-section-number">2.9.2</span> Export a Feature Collection</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Export<span class="op">.</span><span class="at">table</span><span class="op">.</span><span class="fu">toDrive</span>({</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">collection</span><span class="op">:</span> feature_collection<span class="op">,</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">description</span><span class="op">:</span> <span class="st">'File_Name'</span><span class="op">,</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">fileFormat</span><span class="op">:</span> <span class="st">'CSV'</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

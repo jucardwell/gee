@@ -9,9 +9,10 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - satellites.qmd	
     - essential_commands.qmd
     - tutorials.qmd
-    - activities.qmd
+
 
 format:
   html:

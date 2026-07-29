@@ -205,12 +205,11 @@ Map.addLayer(
     },
     'Layer Name' //  name to show in Layer Manager
 );
-
 ```
 
 Or you can manually set palettes:
 
-```javascript
+``` javascript
 
 Map.addLayer(
     image, //  image to display
@@ -223,14 +222,13 @@ Map.addLayer(
     'Layer Name' //  name to show in Layer Manager
 );
 
-
 ```
 
 ## Selecting Bands
 
 ### Select Bands
 
-```javascript
+``` javascript
 
 // select a single band
 var band = image.select('band_name');
@@ -242,11 +240,10 @@ var bands = image.select(['band_1', 'band_2', 'band_3']);
 
 ### Rename Bands
 
-```javascript
+``` javascript
 
 // rename a band
 var renamed = image.select('old_band_name').rename('new_band_name');
-
 ```
 
 ## Band Math
@@ -255,7 +252,7 @@ Band math allows you to create new raster bands by mathematically combining exis
 
 ### Basic Mathematical Operations
 
-```javascript
+``` javascript
 // select individual bands 
 
 var band_1 = image.select('band_1'); 
@@ -276,27 +273,25 @@ var divided = band_1.divide(band_2);
 //built in normalized difference function
 
 var normalized_difference = image.normalizedDifference(['band_1', 'band_2'])
-
 ```
 
 ### Using Expressions
+
 Expressions can be used for more complicated operations
 
-```javascript
+``` javascript
 
 var calculated_band = image.expression( 
                     '(BAND_1 - BAND_2) / (BAND_1 + BAND_2)', 
                     { BAND_1: image.select('band_1'), 
                     BAND_2: image.select('band_2') });
-
 ```
-
 
 ## Thresholds, Reclassifying, and Masking
 
 ### Threshold
 
-```javascript
+``` javascript
 
 // greater than a threshold
 var thresholded = image.gt(threshold);
@@ -312,12 +307,11 @@ var thresholded = image.lte(threshold);
 
 // equal to a threshold
 var thresholded = image.eq(threshold);
-
 ```
 
 ### Reclassifying
 
-```javascript
+``` javascript
 
 // create multiple classes
 var reclassified = image
@@ -328,12 +322,11 @@ var reclassified = image
         value_2
     )
     .where(image.gte(threshold_2), value_3);
-
 ```
 
 ### Masking
 
-```javascript
+``` javascript
 // create a mask
 var mask = image.gt(threshold);
 
@@ -341,8 +334,97 @@ var mask = image.gt(threshold);
 var masked_image = image.updateMask(mask);
 ```
 
+### Clipping Images
 
+```javascript
 
+var clipped = image.clip(roi);
+```
 
+## Image Composites
 
+```javascript
+// median composite
+var composite = image_collection.median();
 
+// mean composite
+var composite = image_collection.mean();
+
+// minimum value composite
+var composite = image_collection.min();
+
+// maximum value composite
+var composite = image_collection.max();
+
+// sum composite
+var composite = image_collection.sum();
+```
+
+## Mapping Functions Over Image Collections
+
+### Defining a Function
+``` javascript
+var function_name = function(image){
+
+    //perform operations here
+
+    return image;
+
+};
+```
+
+### Map a Function
+
+```javascript
+var processed_collection =
+    image_collection.map(function_name);
+
+```
+
+### Reduce Image by Region
+
+```javascript
+
+var projection = image.projection();
+
+var output = image.reduceRegions({
+    collection: feature_collection,
+    reducer: ee.Reducer.mean(),
+    scale: projection.nominalScale(),
+    crs: projection
+});
+
+```
+
+## Exporting Data
+
+### Export an Image
+
+```javascript
+
+//get the image projection
+var projection = image.projection();
+
+//get the pixel size
+var scale = projection.nominalScale();
+
+//export the image
+Export.image.toDrive({
+    image: image, //image to export
+    description: 'File_Name', //name of the exported file
+    scale: scale, //pixel size
+    fileFormat: 'GeoTIFF' //output format
+});
+
+```
+
+### Export a Feature Collection
+
+```javascript
+Export.table.toDrive({
+    collection: feature_collection,
+    description: 'File_Name',
+    fileFormat: 'CSV'
+});
+
+```

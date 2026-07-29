@@ -1,10 +1,15 @@
 # Tutorials
 
+To complete these tutorials, copy and paste the code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+
 ## Tutorial 1: Introduction to Javascript
 
-This tutorial will introduce you to the basics of scripting in the GEE Environment.
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Create and assign variables in JavaScript
+- Use strings, numbers, lists, and objects
+- Print variables and objects to the Google Earth Engine console
+- Write and interpret comments in Javascript code
 
 ``` javascript
 //Welcome to the Google Earth Engine Code Editor!
@@ -108,13 +113,17 @@ print("");
 
 //now print a part of the object here
 ```
+
 ## Tutorial 2: Introduction to GEE API
 
-This tutorial will introduce you to the basics of GEE's API and how to use server-side functions.
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Explain the difference between client-side and server-side processing in Google Earth Engine
+- Use basic Google Earth Engine API (ee) functions for mathematical and logical operations
+- Create, manipulate, and analyze server-side lists using the GEE API
+- Apply reducers and filters to perform basic data processing in Google Earth Engine
 
-```javascript
+``` javascript
 // Google Earth Engine's code editor allows us to access the 
 //Earth Engine API. The Earth Engine API is very powerful and 
 //contains methods to do most everything we would want to do in 
@@ -230,11 +239,13 @@ print("Number of elements:", countElements);
 
 ## Tutorial 3: Introduction to Images and Image Collections
 
-This tutorial will introduce you to Images and Image Collections, the fundamental data type in Google Earth Engine. 
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Distinguish between an ee.Image() and an ee.ImageCollection()
+- Load and inspect images and image collections in GEE
+- Access image metadata
 
-```javascript
+``` javascript
 // An ee.Image is a single satellite image or other raster dataset.
 // An ee.ImageCollection is a collection of ee.Images.
 // It often represents all images from a particular satellite or dataset,
@@ -288,17 +299,18 @@ var filteredCollection = firstCollection.filterDate('2025-08-01', '2025-08-05');
 
 
 //how much cloud coverage is there in the 124 feature in the collection? 
-
-
 ```
 
 ## Tutorial 4: Visualizing Single Bands
 
-This tutorial will introduce you to visualizing a single band in GEE
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Display single-band images in Google Earth Engine
+- Apply visualization parameters such as minimum and maximum values
+- Use the Inspector tool to explore pixel values in an image
+- Create and apply color palettes to improve single-band image visualization
 
-```javascript
+``` javascript
 
 //Creating appropriate visualizations in Google Earth Engine
 //is one of the most important skills that we can learn. 
@@ -354,16 +366,17 @@ Map.addLayer(image, {min: 0, max:250});
 
 
 //Create a new 4 color palette and re-visualize your data with it
-
 ```
 
 ## Tutorial 5: Visualizing a Multi-Band Image
 
-This tutorial will introduce you to visualizing a multi-band image in GEE
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Visualize multi-band images in Google Earth Engine
+- Create true-color and false-color composites using different band combinations
+- Apply appropriate minimum and maximum values for multi-band visualizations
 
-```javascript
+``` javascript
 
 //Visualizing a multi-band image requires a couple more steps than a single band image
 
@@ -413,16 +426,17 @@ var image = ee.Image("LANDSAT/LC08/C02/T1_L2/LC08_016035_20240325");
 //select three other bands from the dataset (by printing metadata)
 //change your visualization to use those three bands. 
 //What does the image look like? 
-
 ```
 
 ## Tutorial 6: Filtering Image Collections
 
-This tutorial will introduce you to filtering image collections by date, location, or metadata property
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Create and use geometries to define areas of interest
+- Filter image collections by date, location, and metadata properties.
+- Create and use geometries to define areas of interest
 
-```javascript
+``` javascript
 //A major pre-processing task that we need to do for image collections 
 //is filter based on time, location, or metadata properties
 
@@ -468,70 +482,146 @@ var stackedFilter = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
                       
 
 //how many images cover greenville and have a cloud cover of less than 5%?
+```
+
+## Tutorial 7: Quality Masks and Image Preprocessing
+
+```javascript
+//Satellite images often contain clouds, cloud shadows,or other poor-quality pixels.
+//Most satellite datasets include one or more Quality Assurance (QA) bands that indicate the quality of each pixel.
+
+
+//Here is an image of Chapel Hill
+var image = ee.Image('LANDSAT/LC08/C02/T1_L2/LC08_016035_20230627');
+
+//add a true-color visualization of the image to the map. 
+//Do you notice the cloud cover?
+
+
+//QA bands store information about each pixel using binary flags.
+//Each binary digit is called a bit. A bit can either be 0 (false) or 1 (true).
+
+//For the Landsat QA_PIXEL band:
+//
+//Bit 0 = Fill (valid pixel is 0)
+//Bit 1 = Dilated Cloud
+//Bit 2 = Cirrus
+//Bit 3 = Cloud
+//Bit 4 = Cloud Shadow
+
+
+//If we wanted to determine whether a pixel contains a cloud, we would create
+//a binary number with only Bit 3 turned on. 
+
+var dialatedBit = 1 << 1;
+var cirrusBit = 1 << 2;
+var cloudBit = 1 << 3;
+var shadowBit = 1 << 4;
+
+
+//bitwiseAnd() compares this binary number to the QA band.
+//If Bit 3 is turned on in the QA band, the result will be nonzero.
+
+var cloud = qa.bitwiseAnd(cloudBit).eq(0);
+
+//Display the cloud mask.
+
+//Create masks for the remaining quality flags
+
+//We can stack masks by using the following 
+// var clearImage = cloud.and(SECONDCONDITION).and(THIRDCONDITION)...
+
+//Write a command that stacks all the masks. 
+
+
+//We can then apply that to the original image
+//var masked = image.updateMask(clear);
+
+
+//Display the masked image.
+
+
+//This worked for one image. However, image collections hundreds or thousands
+//of images. Rather than repeating this code for every image, we can write a function
+
+
+var maskClouds = function(image){
+  var qa = image.select('QA_PIXEL');
+  var dilatedCloud = qa.bitwiseAnd(1 << 1).eq(0);
+  var cirrus = qa.bitwiseAnd(1 << 2).eq(0);
+  var cloud = qa.bitwiseAnd(1 << 3).eq(0);
+  var shadow = qa.bitwiseAnd(1 << 4).eq(0);
+  var snow = qa.bitwiseAnd(1 << 5).eq(0);
+  var clear =
+       dilatedCloud
+      .and(cirrus)
+      .and(cloud)
+      .and(shadow)
+      .and(snow);
+
+  return image.updateMask(clear);
+};
+
+
+//Load a Landsat image collection over Chapel Hill.
+
+var collection = ee.ImageCollection("LANDSAT/LC09/C02/T1_L2")
+    .filterBounds(ee.Geometry.Point(-79.0558, 35.9132))
+    .filterDate('2025-05-01', '2025-09-30');
+
+
+//Apply the masking function to every image
+//in the collection.
+
+var cleanCollection = collection.map(maskClouds);
 
 ```
 
-## Tutorial 7: Mosaics and Composites
+## Tutorial 8: Image Composites
 
-This tutorial will introduce you to creating Mosaics and Composites in GEE
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Explain the difference between mosaicking and compositing
+- Create mosaics
+- Generate composite images using aggregation functions
 
-```javascript
-//Compositing and mosaicing are important tools for image analysis
-//compositing involves combining spatially overlapping images
-//in an image collection into a single image, using an aggregation
-//function
-
-
-//mosaicking involves combining non spatially-overlapping images
-//into a single image
-
-
-//Write two commands that add the following images to the map and zoom 
-//into Chapel Hill
-
-var ch_naip_1 = ee.Image("USDA/NAIP/DOQQ/n_3507908_se_17_2_20050621")
-var ch_naip_2 = ee.Image("USDA/NAIP/DOQQ/n_3507908_sw_17_2_20050621")
-3
-
-//As you can see, these separate images are spatially continuous.
-//We can use a mosaic to combine them into a single image
-//fill in the command below with the correct image names
-//var mosaic = ee.ImageCollection([IMAGE1, IMAGE2]).mosaic();
-
-
-//Add the mosaicked image to the map
-
-
+``` javascript
 //Compositing involves selecting an aggregation function to 
 //turn an image collection into a single summary image. 
 
-// Load all NAIP images for Carrboro
-var carrboro_naip = ee.ImageCollection('USDA/NAIP/DOQQ')
-  .filterBounds(ee.Geometry.Point(-79.0873, 35.9147))
-  .select(['R', 'G', 'B']);
+//Reload your cloud masked collection from Tutorial 7. 
 
-// Temporally composite the images with a maximum value function.
-var composite = carrboro_naip.max();
+//How many images are there? 
 
 
-//add the composite image to the map
+//What if you wanted to produce one image to summarize all of the
+//images in the image collection? 
 
 
-//now make a composite that uses the mean instead of the max and 
-//add that to the map. Can you notice any differences?
+//We can create a composite image by applying an aggregation function 
+//to the image collection.
 
+var compositeLandsat = cleanCollection.median(); 
+
+
+//Visualize the composite
+
+//other options include median(), min(), max(), etc.
+
+
+//Make a composite using a different aggregation option. Can you notice any
+//differences?
 ```
 
-## Tutorial 8: False Color Visualizations
+## Tutorial 9: False Color Visualizations
 
-This tutorial will introduce you to creating Mosaics and Composites in GEE
+After completing this tutorial you should be able to:
 
-To begin this tutorial, copy and paste the following code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script
+- Explain the difference between natural-color and false-color image visualizations
+- Create false-color composites using different band combinations
+- Interpret how false-color imagery reveals features not visible in natural-color images
 
-```javascript
-
+``` javascript
 //so far, we have only worked with "Natural Color" visualizations, which means that we 
 //map the RGB for the image to the Red, Green, and Blue bands on the satellite.
 
@@ -597,23 +687,27 @@ Map.addLayer(
 
 //What can you learn about the CH area from this visualization that you can't
 //see in the natural color? 
-
 ```
 
-## Tutorial 9: Spectral Indices, Thresholding, and Masking
+## Tutorial 10: Spectral Indices, Thresholding, and Masking
 
-```javascript
+After completing this tutorial you should be able to:
 
-// In the previous tutorial, we learned how to create false-color composites
-// using different Sentinel-2 bands to visualize features around Chapel Hill.
+- Calculate spectral indices using band math and .normalizedDifference()
+- Apply thresholds to create binary classifications
+- Reclassify continuous index values into multiple categories
+- Use masks to isolate selected conditions in images
 
-// While visualizations help us visually interpret satellite imagery, we often need
-// quantitative measurements to analyze the landscape.
+``` javascript
+//In the last tutorial, we learned how to create false-color composites
+//using different Sentinel-2 bands to visualize features around Chapel Hill.
 
-// Spectral indices allow us to mathematically combine different spectral bands
-// to highlight specific land surface characteristics, such as vegetation,
-// water, or burned areas.
+//While visualizations help us visually interpret satellite imagery, we often need
+//quantitative measurements to analyze the landscape.
 
+//Spectral indices allow us to mathematically combine different spectral bands
+//to highlight specific land surface characteristics, such as vegetation,
+//water, or burned areas.
 
 //Remember our vegetation visualization
 var image = ee.Image('COPERNICUS/S2_SR_HARMONIZED/20260313T160041_20260313T160757_T17SPV')
@@ -628,31 +722,29 @@ Map.addLayer(
     'Vegetation' 
 );
 
-// In this false-color composite, healthy vegetation appears dark red because the
-// near-infrared (NIR) band is displayed in the red channel. Since healthy vegetation
-// reflects a large amount of NIR light, it stands out as shades of red.
-
+//In this false-color composite, healthy vegetation appears dark red because the
+//near-infrared (NIR) band is displayed in the red channel. Since healthy vegetation
+//reflects a large amount of NIR light, it stands out as shades of red.
 
 //But what if we wanted to represent vegetation health mathematically? 
-// We can use GEEs band math, where we combine multiple spectral bands using mathematical
-// formulas to highlight specific land surface characteristics.
+//We can use GEEs band math, where we combine multiple spectral bands using mathematical formulas
 
-// One of the most widely used spectral indices is the Normalized Difference
-// Vegetation Index (NDVI). NDVI compares the near-infrared (NIR) and red bands
-// to estimate the presence and health of vegetation.
+//One of the most widely used spectral indices is the Normalized Difference
+//Vegetation Index (NDVI). NDVI compares the near-infrared (NIR) and red bands
+//to estimate the presence and health of vegetation.
 
-// Extract the near infrared and red bands.
+//Get bands
 var nir = image.select('B8');
 var red = image.select('B4');
 
-// Calculate the numerator and the denominator using subtraction and addition respectively.
+//Calculate the numerator and the denominator using band subtraction and addition
 var numerator = nir.subtract(red);
 var denominator = nir.add(red);
 
-// Now calculate NDVI.
+//calculate NDVI.
 var ndvi = numerator.divide(denominator);
 
-// Add the layer to our map with a palette.
+//Add the layer
 Map.addLayer(ndvi, {
     min: -1,
     max: 1,
@@ -666,7 +758,7 @@ Map.addLayer(ndvi, {
 //provides the ability to do that particular sequence of subtraction, addition, and division 
 //in a single step, using the normalizedDifference method.
 
-// Now use the built-in normalizedDifference function to achieve the same outcome.
+//Now use the built-in normalizedDifference function to achieve the same outcome.
 var ndviND = image.normalizedDifference(['B8', 'B4']);
 Map.addLayer(ndviND, {
     min: -1,
@@ -677,7 +769,6 @@ Map.addLayer(ndviND, {
 //NDVI gives us a continuous value of vegetation
 //let's say that we want to categorize our data into highly vegetated and not highly vegetated
 //to do this, we can use a threshold
-
 
 //for instance, let's say that over .7 is highly vegetated. 
 
@@ -693,31 +784,27 @@ Map.addLayer(chVeg,
     },
     'Highly Vegetated');
     
-// So far, we've used a threshold to divide our NDVI image into two classes:
-// highly vegetated (1) and not highly vegetated (0).
 
 // While binary classification is useful, we often want to classify an image
-// into more than two categories. For example, we might want to identify
+//into more than two categories. For example, we might want to identify
 // areas with low, moderate, and high vegetation.
 
-// We can do this using the .where() method.
-//
-// Rather than hiding pixels, .where() changes the value of pixels that
-// satisfy a condition. By applying multiple .where() statements, we can
-// build a classified image with several categories.
+//We can do this using the .where() method which changes the value of pixels that
+//satisfy a condition. By applying multiple .where() statements, we can
+//build a classified image with several categories.
 
-// Create a starting image where every pixel has a value of 1.
-// This will represent areas with moderate vegetation.
+//Create a starting image where every pixel has a value of 1.
+//This will represent areas with moderate vegetation.
 var ndviClasses = ee.Image(1)
     .clip(ndviND.geometry());
 
-// Assign pixels with NDVI values less than or equal to 0.3 to class 0.
+//Assign pixels with NDVI values less than or equal to 0.3 to class 0.
 ndviClasses = ndviClasses.where(ndviND.lte(0.3), 0);
 
-// Assign pixels with NDVI values greater than or equal to 0.7 to class 2.
+//Assign pixels with NDVI values greater than or equal to 0.7 to class 2.
 ndviClasses = ndviClasses.where(ndviND.gte(0.7), 2);
 
-// Pixels with NDVI values between 0.3 and 0.7 remain class 1.
+//Pixels with NDVI values between 0.3 and 0.7 remain class 1.
 
 // Display the classified NDVI image.
 Map.addLayer(ndviClasses,
@@ -729,10 +816,9 @@ Map.addLayer(ndviClasses,
     'Low, Moderate, High NDVI');
 
 
-// Now suppose we only want to keep the highly vegetated areas.
-//
-// updateMask() uses another image (called a mask) to decide which pixels
-// should remain visible.
+//Now suppose we only want to keep the highly vegetated areas.
+//updateMask() uses another image (called a mask) to decide which pixels
+//should remain visible.
 //
 // The mask (chVeg) contains:
 //   1 = keep this pixel
@@ -773,5 +859,253 @@ Map.addLayer(masked,
 // Assign: 0 = NDBI <= 0, 1 = 0 < NDBI < 0.2, 2 = NDBI >= 0.2
 //
 // Experiment with different thresholds and compare the results
+```
+
+## Tutorial 11: Feature Collections, Clip, and Export
+
+Download the data for the tutorial [here](https://drive.google.com/file/d/1JN321-l0iWzYpJTlEVPRiqwCMus-bi7Z/view?usp=sharing)
+
+After completing this tutorial you should be able to:
+
+- Create and visualize features and feature collections
+- Import vector datasets as assets
+- Clip images to a reguion of interest using vector data
+- Export images from Google Earth Engine to Google Drive
+
+``` javascript
+//So far, we've only worked extensively with Images and Image Collections.
+
+//At times, however, we have created geometries (for instance, for filtering),
+//using the ee.Geometry.Point() function. This point, which we can also
+//add to a map
+var point = ee.Geometry.Point(-79.0873, 35.9147);
+
+//uncomment the command below
+//Map.addLayer(point);
+
+//A single point, polygon, or line is called a feature. 
+// Multiple features are called a feature collection
+var points = [
+  ee.Geometry.Point(-79.0873, 35.9147),
+  ee.Geometry.Point(-78.7873, 35.8147),
+  ee.Geometry.Point(-78.5873, 35.7147)
+];
+
+var point_collection = ee.FeatureCollection(points);
+
+
+//uncomment the command below
+//Map.addLayer(point_collection)
+
+
+// You can also make features and feature collections using the geometry 
+// buttons below (look above the zoom in / zoom out buttons on the map)
+
+//Try to make a new feature using those geometry buttons
+
+
+//Try to make a new feature collection using the geometry buttons
+
+
+
+//Finally, you can import features or feature collections.
+
+
+//Click on Assets and find the "New" button. 
+//Upload the "North_Carolina_Counties.geojson" from the course website
+
+
+//Once it has fully uploaded click the "->" button next to the asset
+//to read it into the script. 
+
+
+//You can use features and feature collections for a variety of tasks. An
+//important one is clipping images/image collections to a region of interest
+
+
+//Clip the following image to North Carolina using the following syntax
+//and add it to the map
+var drought = ee.ImageCollection("GRIDMET/DROUGHT").first()
+
+//var clipped = image.clip(geometry)
+
+
+
+
+
+// Awesome! Another important task might be exporting an image so that
+// you can use it in another software like QGIS
+//You export images directly to your Google Drive using the following syntax
+
+
+// Export.image.toDrive({
+//   image: IMAGE, //this is the image you want to export
+//   description: "NAME" ,//this is what you want to name the file
+//   scale: NUMBER, // Scale. Find this from the catalog entry as pixel size
+//   fileFormat: 'GeoTIFF' // Specify the file format
+// });
+
+
+//Export your clipped image to your google drive
+```
+
+## Tutorial 12: Mapping Over Image Collections
+
+After completing this tutorial you should be able to:
+
+- Write a function that performs an operation on an image
+- Map a function across every image in an image collection
+- Add a calculated band to each image in a collection
+
+``` javascript
+
+//In Tutorial 7, we used .map() to apply a cloud masking function to every image 
+//in a Landsat image collection. The same approach can be used for many other tasks, 
+//such as unit conversions, calculating spectral indices,or adding new bands to every image.
+
+
+//"Mapping" over an image collection involves applying the same operation 
+//over the entire image collection. 
+
+
+//For instance, let's say we want to look at rainfall during Hurricane Florence
+//using the RTMA dataset. 
+
+
+//The precipitation variable in the RTMA dataset is in kg/m^2
+//which is not an easily interpretable value. 
+
+//We might want to add a new band called "precip_inches" to every
+//image in an image collection that has been filtered to North Carolina
+//during the dates of hurricane florence.
+
+//We would do that by running the following 
+
+
+// // Define the region of interest (ROI) - North Carolina
+// var roi = ee.Geometry.Rectangle([-84.3219, 33.7529, -75.4606, 36.5880]);
+
+// // Load the RTMA ImageCollection for a period around Hurricane Florence
+// var rtmaCollection = ee.ImageCollection('NOAA/NWS/RTMA')
+//   .filterDate('2018-09-10', '2018-09-20')
+//   .select('ACPC01');
+
+// // Function to convert precipitation from kg/m² to inches
+// var kgm2ToInches = function(image) {
+//   var precipitation = image.select('ACPC01');
+//   var precipitationInches = precipitation.multiply(0.0393701).rename('precip_inches');
+//   return image.addBands(precipitationInches);
+// };
+
+// // Map the conversion function over the RTMA collection
+// var precipitationInchesCollection = rtmaCollection.map(kgm2ToInches);
+
+
+//Print the image collection. If you look at the bands in any of the images
+//there should be a new band called 'precip_inches'
+
+//Clip the image collection to the area of interest
+
+
+//Write a script that creates a composite of the 'precip_inches' band 
+// of that image collection using the .sum() command. 
+//hint: you also need to use .select('precip_inches') before you use the 
+//sum command to only sum the precip_inches band
+
+
+//Add the composite to the map with appropriate visualization parameters
+
+
+//Which areas of North Carolina recieved the most rainfall during Florence?
+
+//Filter RTMA to dates for Hurricane Helene in WNC. 
+
+//Visit the data catalog entry for RTMA. Identify the wind gust band and write a function that
+//converts gusts from m/s to mph. Map that across the filtered image 
+
+//Use a composite with the .max() function to visualize maximum wind gust
+```
+
+## Tutorial 13: Reducers
+
+After completing this tutorial you should be able to:
+
+- Explain how reducers summarize image collections and raster values
+- Use reduceRegions() to calculate statistics for features and feature collections
+- Export summary statistics as a .csv
+
+``` javascript
+//We have already used reducers when creating composites
+//Reducers can be used to reduce all the images in an image collection
+//the most common reducers include .mean(), .sum(), .median()
+
+//What these reducers do is reduce an Image Collection to a single Image. 
+
+
+//However, you can also use reducers to reduce Images or Image Collections across
+//Features or Feature Collections
+
+//For this, we will use the .reduceRegions() function. 
+
+
+//First, add your North Carolina county asset to this script. 
+
+//Now uncomment the command below to load a DEM image
+//var dem = ee.Image('CGIAR/SRTM90_V4');
+
+//To reduce this image across North Carolina counties, we will use the
+//following syntax
+
+//var projection = dem.projection();
+
+//the scale should be the pixel resolution of the dataset
+// var nc_county_elevation = dem.reduceRegions({
+//   collection: table,
+//   reducer: ee.Reducer.mean(),
+//   scale: projection.nominalScale(),
+//   crs: projection
+// });
+
+
+
+//write a command to print the output of this reduction
+
+
+//To export this file to your drive, you would use the following syntax
+// Export.table.toDrive({
+//   collection: nc_county_elevation,
+//   description: 'NC_County_Elevation',
+//   fileFormat: 'CSV'
+// });
+
+
+
+//What about if you want to use .reduceRegions with an image collection?
+//What I usually do is first create a composite of an image collection and then
+//use the reduceRegions() function. 
+
+//Let's practice on the following dataset
+//https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_MONTHLY_AGGR
+
+
+//First, create an image collection that includes all images from 2023 and 
+//selects just the 'total_precipitation_sum' band.
+
+
+//Now create a composite image. You can decide if you want to calculate
+//the mean or the median 
+
+
+//add this image to the map using appropriate visualization parameters
+
+
+
+//Now reduce that image to the North Carolina counties and export your
+//results. Notice that this requires you to use another reducer. 
+
+//This reducer can be the same one you used to create the composite
+//or it can be a different one. For instance, you can composite the 
+//mean but decide to take the max when reducing to regions.
+//What that returns is the max average value in each region. 
 
 ```
