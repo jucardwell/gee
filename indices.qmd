@@ -1,0 +1,44 @@
+# Common Indices and Visualizations
+
+## Important Bands
+
+| Band  | Sentinel-2 | Landsat 8/9 |
+|-------|------------|-------------|
+| Blue  | B2         | B2          |
+| Green | B3         | B3          |
+| Red   | B4         | B4          |
+| NIR   | B8         | B5          |
+| SWIR1 | B11        | B6          |
+| SWIR2 | B12        | B7          |
+
+## Indices
+
+- **NDVI** (Normalized Difference Vegetation Index): `(NIR - Red) / (NIR + Red)`
+
+- **EVI** (Enhanced Vegetation Index): corrects for atmospheric effects and canopy background, better in high-biomass areas: `2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)`
+
+- **NDWI** (Normalized Difference Water Index): `(Green - NIR) / (Green + NIR)`
+
+- **NDBI** (Normalized Difference Built-up Index): `(SWIR1 - NIR) / (SWIR1 + NIR)`
+
+- **NBR** (Normalized Burn Ratio): `(NIR - SWIR2) / (NIR + SWIR2)`
+
+- **BSI** (Bare Soil Index): `((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue))`
+
+## Visualizations
+
+- **True Color (Natural Color)**: R, G, B
+
+- **Standard False Color (False Color Infrared)**: NIR, R, G
+
+- **Agriculture**: SWIR1, NIR, B
+
+- **Land/Water**: NIR, SWIR1, R
+
+- **Urban/Built-up**: SWIR2, SWIR1, R
+
+- **Geology/Bare Earth**: SWIR2, SWIR1, B
+
+- **Atmospheric Penetration**: SWIR2, SWIR1, NIR
+
+- **Short-Wave Infrared**: SWIR2, NIR, R

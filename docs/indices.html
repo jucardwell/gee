@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Julia Cardwell">
-<meta name="dcterms.date" content="2026-07-09">
 
-<title>gee</title>
+<title>3&nbsp; Common Indices and Visualizations – gee</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -35,7 +33,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./essential_commands.html" rel="next">
+<link href="./satellites.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -86,7 +85,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./indices.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Common Indices and Visualizations</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -113,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -131,14 +130,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./indices.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Common Indices and Visualizations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./essential_commands.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Essential Commands</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Tutorials</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tutorials</span></span></a>
   </div>
 </li>
     </ul>
@@ -151,7 +156,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#important-bands" id="toc-important-bands" class="nav-link active" data-scroll-target="#important-bands"><span class="header-section-number">3.1</span> Important Bands</a></li>
+  <li><a href="#indices" id="toc-indices" class="nav-link" data-scroll-target="#indices"><span class="header-section-number">3.2</span> Indices</a></li>
+  <li><a href="#visualizations" id="toc-visualizations" class="nav-link" data-scroll-target="#visualizations"><span class="header-section-number">3.3</span> Visualizations</a></li>
   </ul>
 </nav>
     </div>
@@ -160,26 +167,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">gee</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Common Indices and Visualizations</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Julia Cardwell </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">July 9, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -189,12 +184,73 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This site was developed by Julia Cardwell for GEOG567. Geospatial Data Analysis with Google Earth Engine at the University of North Carolina at Chapel Hill.</p>
-<p><img src="by-nc-nd.eu.png" class="img-fluid" width="123"></p>
-<p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
-<p>Last Updated: July 2026</p>
+<section id="important-bands" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="important-bands"><span class="header-section-number">3.1</span> Important Bands</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Band</th>
+<th>Sentinel-2</th>
+<th>Landsat 8/9</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Blue</td>
+<td>B2</td>
+<td>B2</td>
+</tr>
+<tr class="even">
+<td>Green</td>
+<td>B3</td>
+<td>B3</td>
+</tr>
+<tr class="odd">
+<td>Red</td>
+<td>B4</td>
+<td>B4</td>
+</tr>
+<tr class="even">
+<td>NIR</td>
+<td>B8</td>
+<td>B5</td>
+</tr>
+<tr class="odd">
+<td>SWIR1</td>
+<td>B11</td>
+<td>B6</td>
+</tr>
+<tr class="even">
+<td>SWIR2</td>
+<td>B12</td>
+<td>B7</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="indices" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="indices"><span class="header-section-number">3.2</span> Indices</h2>
+<ul>
+<li><p><strong>NDVI</strong> (Normalized Difference Vegetation Index): <code>(NIR - Red) / (NIR + Red)</code></p></li>
+<li><p><strong>EVI</strong> (Enhanced Vegetation Index): corrects for atmospheric effects and canopy background, better in high-biomass areas: <code>2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)</code></p></li>
+<li><p><strong>NDWI</strong> (Normalized Difference Water Index): <code>(Green - NIR) / (Green + NIR)</code></p></li>
+<li><p><strong>NDBI</strong> (Normalized Difference Built-up Index): <code>(SWIR1 - NIR) / (SWIR1 + NIR)</code></p></li>
+<li><p><strong>NBR</strong> (Normalized Burn Ratio): <code>(NIR - SWIR2) / (NIR + SWIR2)</code></p></li>
+<li><p><strong>BSI</strong> (Bare Soil Index): <code>((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue))</code></p></li>
+</ul>
+</section>
+<section id="visualizations" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="visualizations"><span class="header-section-number">3.3</span> Visualizations</h2>
+<ul>
+<li><p><strong>True Color (Natural Color)</strong>: R, G, B</p></li>
+<li><p><strong>Standard False Color (False Color Infrared)</strong>: NIR, R, G</p></li>
+<li><p><strong>Agriculture</strong>: SWIR1, NIR, B</p></li>
+<li><p><strong>Land/Water</strong>: NIR, SWIR1, R</p></li>
+<li><p><strong>Urban/Built-up</strong>: SWIR2, SWIR1, R</p></li>
+<li><p><strong>Geology/Bare Earth</strong>: SWIR2, SWIR1, B</p></li>
+<li><p><strong>Atmospheric Penetration</strong>: SWIR2, SWIR1, NIR</p></li>
+<li><p><strong>Short-Wave Infrared</strong>: SWIR2, NIR, R</p></li>
+</ul>
 
 
 </section>
@@ -602,10 +658,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./satellites.html" class="pagination-link" aria-label="Essential Satellites and Raster Products">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Essential Satellites and Raster Products</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Course Information">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Information</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./essential_commands.html" class="pagination-link" aria-label="Essential Commands">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

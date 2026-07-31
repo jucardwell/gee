@@ -1,9 +1,9 @@
-# Introduction
+# Course Information
 
-This is a book created from markdown and executable code.
+## [How This Course Works](https://docs.google.com/document/d/1yWZ-ZnN_DjC2KUnMqhZ6I_9xs0fnixi1R1Krsefy2R4/edit?usp=sharing)
 
-See @knuth84 for additional discussion of literate programming.
+## [Course Schedule](https://docs.google.com/spreadsheets/d/1a-0XmGnPNUUxZP-PiCjZoxFIuXQfpiuZbvvrYOcLPhA/edit?usp=sharing)
 
-```{r}
-1 + 1
-```
+## [Course Slides](https://drive.google.com/drive/folders/1cSkBebHEJ884o8YcWWto2G-u1nX8JTVh?usp=sharing)
+
+## [Assignments](https://drive.google.com/drive/folders/1Zv7n1IjruJzZtmUAuE4DPtI-lGD9VAsE?usp=sharing)

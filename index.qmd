@@ -1,9 +1,9 @@
 # Preface {.unnumbered}
 
-This is a Quarto book.
+This site was developed by Julia Cardwell for GEOG567. Geospatial Data Analysis with Google Earth Engine at the University of North Carolina at Chapel Hill.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+![](by-nc-nd.eu.png){width="123"}
 
-```{r}
-1 + 1
-```
+This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/).
+
+Last Updated: July 2026

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; Tutorials – gee</title>
+<title>5&nbsp; Tutorials – gee</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./activities.html" rel="next">
 <link href="./essential_commands.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -120,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorials.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tutorials</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorials.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tutorials</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -154,25 +153,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Information</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./satellites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Essential Satellites and Raster Products</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./indices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Common Indices and Visualizations</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./essential_commands.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Essential Commands</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./tutorials.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tutorials</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./activities.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tutorials</span></span></a>
   </div>
 </li>
     </ul>
@@ -185,19 +190,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#tutorial-1-introduction-to-javascript" id="toc-tutorial-1-introduction-to-javascript" class="nav-link active" data-scroll-target="#tutorial-1-introduction-to-javascript"><span class="header-section-number">3.1</span> Tutorial 1: Introduction to Javascript</a></li>
-  <li><a href="#tutorial-2-introduction-to-gee-api" id="toc-tutorial-2-introduction-to-gee-api" class="nav-link" data-scroll-target="#tutorial-2-introduction-to-gee-api"><span class="header-section-number">3.2</span> Tutorial 2: Introduction to GEE API</a></li>
-  <li><a href="#tutorial-3-introduction-to-images-and-image-collections" id="toc-tutorial-3-introduction-to-images-and-image-collections" class="nav-link" data-scroll-target="#tutorial-3-introduction-to-images-and-image-collections"><span class="header-section-number">3.3</span> Tutorial 3: Introduction to Images and Image Collections</a></li>
-  <li><a href="#tutorial-4-visualizing-single-bands" id="toc-tutorial-4-visualizing-single-bands" class="nav-link" data-scroll-target="#tutorial-4-visualizing-single-bands"><span class="header-section-number">3.4</span> Tutorial 4: Visualizing Single Bands</a></li>
-  <li><a href="#tutorial-5-visualizing-a-multi-band-image" id="toc-tutorial-5-visualizing-a-multi-band-image" class="nav-link" data-scroll-target="#tutorial-5-visualizing-a-multi-band-image"><span class="header-section-number">3.5</span> Tutorial 5: Visualizing a Multi-Band Image</a></li>
-  <li><a href="#tutorial-6-filtering-image-collections" id="toc-tutorial-6-filtering-image-collections" class="nav-link" data-scroll-target="#tutorial-6-filtering-image-collections"><span class="header-section-number">3.6</span> Tutorial 6: Filtering Image Collections</a></li>
-  <li><a href="#tutorial-7-quality-masks-and-image-preprocessing" id="toc-tutorial-7-quality-masks-and-image-preprocessing" class="nav-link" data-scroll-target="#tutorial-7-quality-masks-and-image-preprocessing"><span class="header-section-number">3.7</span> Tutorial 7: Quality Masks and Image Preprocessing</a></li>
-  <li><a href="#tutorial-8-image-composites" id="toc-tutorial-8-image-composites" class="nav-link" data-scroll-target="#tutorial-8-image-composites"><span class="header-section-number">3.8</span> Tutorial 8: Image Composites</a></li>
-  <li><a href="#tutorial-9-false-color-visualizations" id="toc-tutorial-9-false-color-visualizations" class="nav-link" data-scroll-target="#tutorial-9-false-color-visualizations"><span class="header-section-number">3.9</span> Tutorial 9: False Color Visualizations</a></li>
-  <li><a href="#tutorial-10-spectral-indices-thresholding-and-masking" id="toc-tutorial-10-spectral-indices-thresholding-and-masking" class="nav-link" data-scroll-target="#tutorial-10-spectral-indices-thresholding-and-masking"><span class="header-section-number">3.10</span> Tutorial 10: Spectral Indices, Thresholding, and Masking</a></li>
-  <li><a href="#tutorial-11-feature-collections-clip-and-export" id="toc-tutorial-11-feature-collections-clip-and-export" class="nav-link" data-scroll-target="#tutorial-11-feature-collections-clip-and-export"><span class="header-section-number">3.11</span> Tutorial 11: Feature Collections, Clip, and Export</a></li>
-  <li><a href="#tutorial-12-mapping-over-image-collections" id="toc-tutorial-12-mapping-over-image-collections" class="nav-link" data-scroll-target="#tutorial-12-mapping-over-image-collections"><span class="header-section-number">3.12</span> Tutorial 12: Mapping Over Image Collections</a></li>
-  <li><a href="#tutorial-13-reducers" id="toc-tutorial-13-reducers" class="nav-link" data-scroll-target="#tutorial-13-reducers"><span class="header-section-number">3.13</span> Tutorial 13: Reducers</a></li>
+  <li><a href="#tutorial-1-introduction-to-javascript" id="toc-tutorial-1-introduction-to-javascript" class="nav-link active" data-scroll-target="#tutorial-1-introduction-to-javascript"><span class="header-section-number">5.1</span> Tutorial 1: Introduction to Javascript</a></li>
+  <li><a href="#tutorial-2-introduction-to-gee-api" id="toc-tutorial-2-introduction-to-gee-api" class="nav-link" data-scroll-target="#tutorial-2-introduction-to-gee-api"><span class="header-section-number">5.2</span> Tutorial 2: Introduction to GEE API</a></li>
+  <li><a href="#tutorial-3-introduction-to-images-and-image-collections" id="toc-tutorial-3-introduction-to-images-and-image-collections" class="nav-link" data-scroll-target="#tutorial-3-introduction-to-images-and-image-collections"><span class="header-section-number">5.3</span> Tutorial 3: Introduction to Images and Image Collections</a></li>
+  <li><a href="#tutorial-4-visualizing-single-bands" id="toc-tutorial-4-visualizing-single-bands" class="nav-link" data-scroll-target="#tutorial-4-visualizing-single-bands"><span class="header-section-number">5.4</span> Tutorial 4: Visualizing Single Bands</a></li>
+  <li><a href="#tutorial-5-visualizing-a-multi-band-image" id="toc-tutorial-5-visualizing-a-multi-band-image" class="nav-link" data-scroll-target="#tutorial-5-visualizing-a-multi-band-image"><span class="header-section-number">5.5</span> Tutorial 5: Visualizing a Multi-Band Image</a></li>
+  <li><a href="#tutorial-6-filtering-image-collections" id="toc-tutorial-6-filtering-image-collections" class="nav-link" data-scroll-target="#tutorial-6-filtering-image-collections"><span class="header-section-number">5.6</span> Tutorial 6: Filtering Image Collections</a></li>
+  <li><a href="#tutorial-7-quality-masks-and-image-preprocessing" id="toc-tutorial-7-quality-masks-and-image-preprocessing" class="nav-link" data-scroll-target="#tutorial-7-quality-masks-and-image-preprocessing"><span class="header-section-number">5.7</span> Tutorial 7: Quality Masks and Image Preprocessing</a></li>
+  <li><a href="#tutorial-8-image-composites" id="toc-tutorial-8-image-composites" class="nav-link" data-scroll-target="#tutorial-8-image-composites"><span class="header-section-number">5.8</span> Tutorial 8: Image Composites</a></li>
+  <li><a href="#tutorial-9-false-color-visualizations" id="toc-tutorial-9-false-color-visualizations" class="nav-link" data-scroll-target="#tutorial-9-false-color-visualizations"><span class="header-section-number">5.9</span> Tutorial 9: False Color Visualizations</a></li>
+  <li><a href="#tutorial-10-spectral-indices-thresholding-and-masking" id="toc-tutorial-10-spectral-indices-thresholding-and-masking" class="nav-link" data-scroll-target="#tutorial-10-spectral-indices-thresholding-and-masking"><span class="header-section-number">5.10</span> Tutorial 10: Spectral Indices, Thresholding, and Masking</a></li>
+  <li><a href="#tutorial-11-feature-collections-clip-and-export" id="toc-tutorial-11-feature-collections-clip-and-export" class="nav-link" data-scroll-target="#tutorial-11-feature-collections-clip-and-export"><span class="header-section-number">5.11</span> Tutorial 11: Feature Collections, Clip, and Export</a></li>
+  <li><a href="#tutorial-12-mapping-over-image-collections" id="toc-tutorial-12-mapping-over-image-collections" class="nav-link" data-scroll-target="#tutorial-12-mapping-over-image-collections"><span class="header-section-number">5.12</span> Tutorial 12: Mapping Over Image Collections</a></li>
+  <li><a href="#tutorial-13-reducers" id="toc-tutorial-13-reducers" class="nav-link" data-scroll-target="#tutorial-13-reducers"><span class="header-section-number">5.13</span> Tutorial 13: Reducers</a></li>
   </ul>
 </nav>
     </div>
@@ -206,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tutorials</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Tutorials</span></h1>
 </div>
 
 
@@ -224,8 +229,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>To complete these tutorials, copy and paste the code into the Google Earth Engine (GEE) Code Editor and save the file to your GEOG567 repository. As you move through the script closely read the comments (denoted by //), which will give you information and prompt you to make changes to the script</p>
-<section id="tutorial-1-introduction-to-javascript" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="tutorial-1-introduction-to-javascript"><span class="header-section-number">3.1</span> Tutorial 1: Introduction to Javascript</h2>
+<section id="tutorial-1-introduction-to-javascript" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="tutorial-1-introduction-to-javascript"><span class="header-section-number">5.1</span> Tutorial 1: Introduction to Javascript</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Create and assign variables in JavaScript</li>
@@ -334,8 +339,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="co">//now print a part of the object here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-2-introduction-to-gee-api" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="tutorial-2-introduction-to-gee-api"><span class="header-section-number">3.2</span> Tutorial 2: Introduction to GEE API</h2>
+<section id="tutorial-2-introduction-to-gee-api" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="tutorial-2-introduction-to-gee-api"><span class="header-section-number">5.2</span> Tutorial 2: Introduction to GEE API</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Explain the difference between client-side and server-side processing in Google Earth Engine</li>
@@ -455,8 +460,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="co">//largely to access the API, where we are using server-side </span></span>
 <span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="co">//functions to accomplish what we want to.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-3-introduction-to-images-and-image-collections" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="tutorial-3-introduction-to-images-and-image-collections"><span class="header-section-number">3.3</span> Tutorial 3: Introduction to Images and Image Collections</h2>
+<section id="tutorial-3-introduction-to-images-and-image-collections" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="tutorial-3-introduction-to-images-and-image-collections"><span class="header-section-number">5.3</span> Tutorial 3: Introduction to Images and Image Collections</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Distinguish between an ee.Image() and an ee.ImageCollection()</li>
@@ -517,8 +522,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">//how much cloud coverage is there in the 124 feature in the collection? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-4-visualizing-single-bands" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="tutorial-4-visualizing-single-bands"><span class="header-section-number">3.4</span> Tutorial 4: Visualizing Single Bands</h2>
+<section id="tutorial-4-visualizing-single-bands" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="tutorial-4-visualizing-single-bands"><span class="header-section-number">5.4</span> Tutorial 4: Visualizing Single Bands</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Display single-band images in Google Earth Engine</li>
@@ -582,8 +587,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="co">//Create a new 4 color palette and re-visualize your data with it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-5-visualizing-a-multi-band-image" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="tutorial-5-visualizing-a-multi-band-image"><span class="header-section-number">3.5</span> Tutorial 5: Visualizing a Multi-Band Image</h2>
+<section id="tutorial-5-visualizing-a-multi-band-image" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="tutorial-5-visualizing-a-multi-band-image"><span class="header-section-number">5.5</span> Tutorial 5: Visualizing a Multi-Band Image</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Visualize multi-band images in Google Earth Engine</li>
@@ -640,8 +645,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">//change your visualization to use those three bands. </span></span>
 <span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">//What does the image look like? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-6-filtering-image-collections" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="tutorial-6-filtering-image-collections"><span class="header-section-number">3.6</span> Tutorial 6: Filtering Image Collections</h2>
+<section id="tutorial-6-filtering-image-collections" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="tutorial-6-filtering-image-collections"><span class="header-section-number">5.6</span> Tutorial 6: Filtering Image Collections</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Create and use geometries to define areas of interest</li>
@@ -694,8 +699,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">//how many images cover greenville and have a cloud cover of less than 5%?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-7-quality-masks-and-image-preprocessing" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="tutorial-7-quality-masks-and-image-preprocessing"><span class="header-section-number">3.7</span> Tutorial 7: Quality Masks and Image Preprocessing</h2>
+<section id="tutorial-7-quality-masks-and-image-preprocessing" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="tutorial-7-quality-masks-and-image-preprocessing"><span class="header-section-number">5.7</span> Tutorial 7: Quality Masks and Image Preprocessing</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">//Satellite images often contain clouds, cloud shadows,or other poor-quality pixels.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">//Most satellite datasets include one or more Quality Assurance (QA) bands that indicate the quality of each pixel.</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -784,8 +789,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cleanCollection <span class="op">=</span> collection<span class="op">.</span><span class="fu">map</span>(maskClouds)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-8-image-composites" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="tutorial-8-image-composites"><span class="header-section-number">3.8</span> Tutorial 8: Image Composites</h2>
+<section id="tutorial-8-image-composites" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="tutorial-8-image-composites"><span class="header-section-number">5.8</span> Tutorial 8: Image Composites</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Explain the difference between mosaicking and compositing</li>
@@ -818,8 +823,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">//Make a composite using a different aggregation option. Can you notice any</span></span>
 <span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">//differences?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-9-false-color-visualizations" class="level2" data-number="3.9">
-<h2 data-number="3.9" class="anchored" data-anchor-id="tutorial-9-false-color-visualizations"><span class="header-section-number">3.9</span> Tutorial 9: False Color Visualizations</h2>
+<section id="tutorial-9-false-color-visualizations" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="tutorial-9-false-color-visualizations"><span class="header-section-number">5.9</span> Tutorial 9: False Color Visualizations</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Explain the difference between natural-color and false-color image visualizations</li>
@@ -892,8 +897,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="co">//What can you learn about the CH area from this visualization that you can't</span></span>
 <span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co">//see in the natural color? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-10-spectral-indices-thresholding-and-masking" class="level2" data-number="3.10">
-<h2 data-number="3.10" class="anchored" data-anchor-id="tutorial-10-spectral-indices-thresholding-and-masking"><span class="header-section-number">3.10</span> Tutorial 10: Spectral Indices, Thresholding, and Masking</h2>
+<section id="tutorial-10-spectral-indices-thresholding-and-masking" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="tutorial-10-spectral-indices-thresholding-and-masking"><span class="header-section-number">5.10</span> Tutorial 10: Spectral Indices, Thresholding, and Masking</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Calculate spectral indices using band math and .normalizedDifference()</li>
@@ -1062,8 +1067,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
 <span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a><span class="co">// Experiment with different thresholds and compare the results</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-11-feature-collections-clip-and-export" class="level2" data-number="3.11">
-<h2 data-number="3.11" class="anchored" data-anchor-id="tutorial-11-feature-collections-clip-and-export"><span class="header-section-number">3.11</span> Tutorial 11: Feature Collections, Clip, and Export</h2>
+<section id="tutorial-11-feature-collections-clip-and-export" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="tutorial-11-feature-collections-clip-and-export"><span class="header-section-number">5.11</span> Tutorial 11: Feature Collections, Clip, and Export</h2>
 <p>Download the data for the tutorial <a href="https://drive.google.com/file/d/1JN321-l0iWzYpJTlEVPRiqwCMus-bi7Z/view?usp=sharing">here</a></p>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
@@ -1147,8 +1152,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a><span class="co">//Export your clipped image to your google drive</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-12-mapping-over-image-collections" class="level2" data-number="3.12">
-<h2 data-number="3.12" class="anchored" data-anchor-id="tutorial-12-mapping-over-image-collections"><span class="header-section-number">3.12</span> Tutorial 12: Mapping Over Image Collections</h2>
+<section id="tutorial-12-mapping-over-image-collections" class="level2" data-number="5.12">
+<h2 data-number="5.12" class="anchored" data-anchor-id="tutorial-12-mapping-over-image-collections"><span class="header-section-number">5.12</span> Tutorial 12: Mapping Over Image Collections</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Write a function that performs an operation on an image</li>
@@ -1222,8 +1227,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a><span class="co">//Use a composite with the .max() function to visualize maximum wind gust</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="tutorial-13-reducers" class="level2" data-number="3.13">
-<h2 data-number="3.13" class="anchored" data-anchor-id="tutorial-13-reducers"><span class="header-section-number">3.13</span> Tutorial 13: Reducers</h2>
+<section id="tutorial-13-reducers" class="level2" data-number="5.13">
+<h2 data-number="5.13" class="anchored" data-anchor-id="tutorial-13-reducers"><span class="header-section-number">5.13</span> Tutorial 13: Reducers</h2>
 <p>After completing this tutorial you should be able to:</p>
 <ul>
 <li>Explain how reducers summarize image collections and raster values</li>
@@ -1710,13 +1715,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./essential_commands.html" class="pagination-link" aria-label="Essential Commands">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Essential Commands</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./activities.html" class="pagination-link" aria-label="Essential Commands">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Essential Commands</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
