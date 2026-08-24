@@ -152,7 +152,7 @@ print(client);
 
 //The server side uses an API function and looks like this
 var server = ee.Number(2).add(2);
-print(client);
+print(server);
 
 //The client side looks a little simpler, and in this example, they
 //work at a similar speed. But for advanced processing, server-side
