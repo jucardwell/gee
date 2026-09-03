@@ -499,28 +499,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">//can give you a bunch of information about the collection before</span></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">//even adding it to GEE</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC09_C02_T1_L2</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">// What is band SR-B3?</span></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">//note that the collection name is just the first part of our firstImage</span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> firstCollection <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'LANDSAT/LC09/C02/T1_L2'</span>)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">//What is the resolution of the different bands?</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC09_C02_T1_L2</span></span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">//try printing our collection, what happens? </span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">//note that the collection name is just the first part of our firstImage</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> firstCollection <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'LANDSAT/LC09/C02/T1_L2'</span>)</span>
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">//we can't print image collections that are too large. Let's start by</span></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">//looking at a smaller set of images. You'll learn a lot more about filtering later</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">//so don't worry now</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">//try printing our collection, what happens? </span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> filteredCollection <span class="op">=</span> firstCollection<span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2025-08-01'</span><span class="op">,</span> <span class="st">'2025-08-05'</span>)<span class="op">;</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">// how many images are in our filtered collection?</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">//we can't print image collections that are too large. Let's start by</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">//looking at a smaller set of images. You'll learn a lot more about filtering later</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">//so don't worry now</span></span>
 <span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">//what is the image name of the 28th feature in the collection? </span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> filteredCollection <span class="op">=</span> firstCollection<span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2025-08-01'</span><span class="op">,</span> <span class="st">'2025-08-05'</span>)<span class="op">;</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">// how many images are in our filtered collection?</span></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">//how much cloud coverage is there in the 124 feature in the collection? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">//what is the image name of the 28th feature in the collection? </span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">//how much cloud coverage is there in the 124 feature in the collection? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-4-visualizing-single-bands" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="tutorial-4-visualizing-single-bands"><span class="header-section-number">5.4</span> Tutorial 4: Visualizing Single Bands</h2>
@@ -548,44 +552,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">//is it. </span></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">//let's add a minimum and maximum value</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">addLayer</span>(image<span class="op">,</span> {<span class="dt">min</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">max</span><span class="op">:</span><span class="dv">250</span>})<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">//Map.addLayer(image, {min: 0, max:1500});</span></span>
 <span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">//can you figure out what this data might be showing? </span></span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">//visit the data catalog to get some more information</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">//https://www.google.com/search?q=CGIAR%2FSRTM90_V4&amp;oq=CGIAR%2FSRTM90_V4&amp;gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIHCAIQABjvBTIHCAMQABjvBTIKCAQQABiiBBiJBTIHCAUQABjvBTIGCAYQRRg60gEHMTg3ajBqN6gCALACAA&amp;sourceid=chrome&amp;source=chrome.ob&amp;ie=UTF-8</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/CGIAR_SRTM90_V4</span></span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">//Open up the Layers tab. There should be two images in there. Click the first</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">//image off. That was the first image we added without any visualization parameters</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">//Using the selection bar next to the second image, lower the opacity to see</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">//the basemap</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">//Zoom out to the whole US. This visualization looks okay, but</span></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">//not great, especially if you zoom into an area like Chapel Hill.</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co">//Use the Inspector tab to click around Chapel Hill and see the pixel values</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">//How many bands are there?</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">//Open up the Layers tab. There should be two images in there. Click the first</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">//image "off". That was the first image we added without any visualization parameters</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">//Using the selection bar next to the second image, lower the opacity to see</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">//the basemap</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co">//Zoom out to the whole US. This visualization looks okay, but</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="co">//not great, especially if you zoom into an area like Chapel Hill.</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co">//Modify the min and max to make sense for Chapel Hill. </span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co">//Use the Inspector tab to click around Chapel Hill and see the pixel values</span></span>
 <span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co">//Greyscale is ok, but we might want to use some colors to </span></span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co">//better distinguish patterns. </span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co">//Palettes let you add color to single-band images.</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="co">//Here is an example of how to use a palette</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="co">//Map.addLayer(image, {min: 0, max: 3000, palette: ['blue', 'green', 'red']});</span></span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="co">//add a palette to the command you wrote above for Chapel Hill. </span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co">//Modify the min and max to make sense for Chapel Hill. </span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="co">//Greyscale is ok, but we might want to use some colors to </span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co">//better distinguish patterns. </span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="co">//Palettes let you add color to single-band images.</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="co">//Here is an example of how to use a palette</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="co">//Map.addLayer(image, {min: 0, max: 3000, palette: ['blue', 'green', 'red']});</span></span>
 <span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="co">//Colors can be referenced by name, or by HEX code. Visit this</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="co">//site for information on colors </span></span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="co">//https://en.wikipedia.org/wiki/Web_colors</span></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="co">//Create a new 4 color palette and re-visualize your data with it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="co">//add a palette to the command you wrote above for Chapel Hill. </span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="co">//Colors can be referenced by name, or by HEX code. Visit this</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="co">//site for information on colors </span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="co">//https://en.wikipedia.org/wiki/Web_colors</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="co">//Create a new 4 color palette and re-visualize your data with it</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-5-visualizing-a-multi-band-image" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="tutorial-5-visualizing-a-multi-band-image"><span class="header-section-number">5.5</span> Tutorial 5: Visualizing a Multi-Band Image</h2>
@@ -618,32 +624,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">//Here is a code snippet that I use to help me pick min/max vlaues</span></span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">//It samples 1000 pixels in the dataset</span></span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">//and finds the 2nd and 98th percentile, which I use for the min and max</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">//You can any of the bands. </span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">//You can do this with any of the bands. </span></span>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">// var stats = image.select('SR_B4')</span></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">//   .sample({</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">//     region: image.geometry(),</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">//     numPixels: 1000,</span></span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">//     scale: 30</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">//   })</span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">//   .reduceColumns({</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">//     reducer: ee.Reducer.percentile([2, 98]),</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">//     selectors: ['SR_B4']</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">//   });</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">// print(stats);</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">//using the values from the command above, modify the visualization</span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">//script by adding a min and max</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">//to uncomment long chunks of code, you can use Ctrl+/ (or Cmd+/ on Mac)</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">// var stats = image.select('SR_B4')</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">//   .sample({</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">//     region: image.geometry(),</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">//     numPixels: 1000,</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">//     scale: 30</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">//   })</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">//   .reduceColumns({</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">//     reducer: ee.Reducer.percentile([2, 98]),</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">//     selectors: ['SR_B4']</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">//   });</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">// print(stats);</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">//using the values from the command above, modify the visualization</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">//script by adding a min and max</span></span>
 <span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">//the bands selected will automatically map to the Red, Green, and Blue</span></span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">//values for the pixel. </span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co">//select three other bands from the dataset (by printing metadata)</span></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">//change your visualization to use those three bands. </span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">//What does the image look like? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">//the bands selected will automatically map to the Red, Green, and Blue</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co">//values for the pixel. </span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">//select three other bands from the dataset (by printing metadata)</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">//change your visualization to use those three bands. </span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">//What does the image look like? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-6-filtering-image-collections" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="tutorial-6-filtering-image-collections"><span class="header-section-number">5.6</span> Tutorial 6: Filtering Image Collections</h2>
@@ -674,30 +681,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">//we can also add geometry to filter by using the map interface</span></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">//click the point button at the top left of the map and add a point </span></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">//in Greenville, NC</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">//see that it adds the geometry to the top tab of our script. </span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">//This is our "Import" area, which we'll use more in the future</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">//change the name from geometry to greenville and filter the image collection</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">//to images that cover greenville. </span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">//How many images are there? </span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">//you can also add lines and polygons</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">//see that it adds the geometry to the top tab of our script. </span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">//This is our "Import" area, which we'll use more in the future</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">//change the name from geometry to greenville and filter the image collection</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">//to images that cover greenville. </span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">//How many images are there? </span></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">//finally, we can filter by metadata properties. A super common</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">//filter is to filter to low cloud images</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> filter4 <span class="op">=</span> dataset<span class="op">.</span><span class="fu">filter</span>(</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUD_COVER'</span><span class="op">,</span> <span class="dv">10</span>)</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">//finally, we can filter by metadata properties. A super common</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">//filter is to filter to low cloud images</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> filter4 <span class="op">=</span> dataset<span class="op">.</span><span class="fu">filter</span>(</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUD_COVER'</span><span class="op">,</span> <span class="dv">10</span>)</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">//we can also stack filters</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> stackedFilter <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'LANDSAT/LC09/C02/T1_L2'</span>)</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>                      <span class="op">.</span><span class="fu">filterBounds</span>(chapelHill)</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>                      <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUD_COVER'</span><span class="op">,</span> <span class="dv">10</span>))<span class="op">;</span></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>                      </span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">//how many images cover greenville and have a cloud cover of less than 5%?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">//we can also stack filters</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> stackedFilter <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'LANDSAT/LC09/C02/T1_L2'</span>)</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>                      <span class="op">.</span><span class="fu">filterBounds</span>(chapelHill)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>                      <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">lt</span>(<span class="st">'CLOUD_COVER'</span><span class="op">,</span> <span class="dv">10</span>))<span class="op">;</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>                      </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">//how many images include greenville, were taken between Jan 2026 and August 2026 and have a cloud cover of less than 5%?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-7-quality-masks-and-image-preprocessing" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="tutorial-7-quality-masks-and-image-preprocessing"><span class="header-section-number">5.7</span> Tutorial 7: Quality Masks and Image Preprocessing</h2>
@@ -707,10 +715,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">//Here is an image of Chapel Hill</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> image <span class="op">=</span> ee<span class="op">.</span><span class="fu">Image</span>(<span class="st">'LANDSAT/LC08/C02/T1_L2/LC08_016035_20230627'</span>)<span class="op">;</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">//add a true-color visualization of the image to the map. </span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">//Do you notice the cloud cover?</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(image)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">//add a true-color visualization of the image to the map. </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">//Do you notice the cloud cover?</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">//QA bands store information about each pixel using binary flags.</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">//Each binary digit is called a bit. A bit can either be 0 (false) or 1 (true).</span></span>
@@ -727,67 +735,96 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">//If we wanted to determine whether a pixel contains a cloud, we would create</span></span>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">//a binary number with only Bit 3 turned on. </span></span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dialatedBit <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dilatedBit <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span><span class="op">;</span></span>
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cirrusBit <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span><span class="op">;</span></span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cloudBit <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span><span class="op">;</span></span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> shadowBit <span class="op">=</span> <span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">4</span><span class="op">;</span></span>
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">//bitwiseAnd() compares this binary number to the QA band.</span></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">//If Bit 3 is turned on in the QA band, the result will be nonzero.</span></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cloud <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(cloudBit)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">//.eq(0) means that the result is 1 where the bit was OFF.</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">//So notCloud is 1 for clear pixels, 0 for cloudy ones.</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">//updateMask() keeps the 1s and drops the 0s, masks mark what you KEEP.</span></span>
 <span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">//Display the cloud mask.</span></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">//Create masks for the remaining quality flags</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> notCloud <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'QA_PIXEL'</span>)<span class="op">.</span><span class="fu">bitwiseAnd</span>(cloudBit)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">//Display the cloud mask.</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">//We can stack masks by using the following </span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">// var clearImage = cloud.and(SECONDCONDITION).and(THIRDCONDITION)...</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">//Write a command that stacks all the masks. </span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">//Create masks for the remaining quality flags</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">//We can stack masks by using the following </span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">// var clearImage = notCloud.and(SECONDCONDITION).and(THIRDCONDITION)...</span></span>
 <span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">//We can then apply that to the original image</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">//var masked = image.updateMask(clear);</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">//Write a command that stacks a mask for dilated, cirrus,and shadow bits onto the </span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">//mask for no cloud. </span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">//Display the masked image.</span></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">//Apply your stacked mask to the original image, then display it.</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">//var masked = image.updateMask(clearImage);</span></span>
 <span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co">//This worked for one image. However, image collections hundreds or thousands</span></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">//of images. Rather than repeating this code for every image, we can write a function</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">//Display the masked image</span></span>
 <span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> maskClouds <span class="op">=</span> <span class="kw">function</span>(image){</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> qa <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'QA_PIXEL'</span>)<span class="op">;</span></span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> dilatedCloud <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> cirrus <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> cloud <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> shadow <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">4</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> snow <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">5</span>)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> clear <span class="op">=</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>       dilatedCloud</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">and</span>(cirrus)</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">and</span>(cloud)</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">and</span>(shadow)</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">and</span>(snow)<span class="op">;</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image<span class="op">.</span><span class="fu">updateMask</span>(clear)<span class="op">;</span></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="co">//Load a Landsat image collection over Chapel Hill.</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> collection <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">"LANDSAT/LC09/C02/T1_L2"</span>)</span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filterBounds</span>(ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Point</span>(<span class="op">-</span><span class="fl">79.0558</span><span class="op">,</span> <span class="fl">35.9132</span>))</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2025-05-01'</span><span class="op">,</span> <span class="st">'2025-09-30'</span>)<span class="op">;</span></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co">//Apply the masking function to every image</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co">//in the collection.</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> cleanCollection <span class="op">=</span> collection<span class="op">.</span><span class="fu">map</span>(maskClouds)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="co">//////whew, if you've made it down here, you can use these functions to mask clouds</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="co">// (| is a shortcut for combining bits into one number -- same result as chaining .and())</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co">// Landsat 8/9 Collection 2 Level 2</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">maskLandsatClouds</span>(image) {</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Select the QA band that stores per-pixel quality flags</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> qa <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'QA_PIXEL'</span>)<span class="op">;</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Bit 1 = dilated cloud, 2 = cirrus, 3 = cloud, 4 = cloud shadow</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> badBits <span class="op">=</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  <span class="co">// A pixel is clear if NONE of those bits are turned on</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> clear <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(badBits)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Keep the clear pixels, drop everything else</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image<span class="op">.</span><span class="fu">updateMask</span>(clear)<span class="op">;</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="co">// Sentinel-2 SR Harmonized </span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">maskS2clouds</span>(image) {</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Select the QA band that stores per-pixel quality flags</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> qa <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'QA60'</span>)<span class="op">;</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Bit 10 = opaque cloud, 11 = cirrus (no shadow flag exists)</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> badBits <span class="op">=</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">10</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">11</span>)<span class="op">;</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  <span class="co">// A pixel is clear if NONE of those bits are turned on</span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> clear <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(badBits)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Keep the clear pixels, drop everything else</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image<span class="op">.</span><span class="fu">updateMask</span>(clear)<span class="op">;</span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a><span class="co">//we will use functions more later in the class, but the basic syntax is</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a><span class="co">//var functionImage = functionName(image)</span></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a><span class="co">//apply a cloud masking function to these two images</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a><span class="co">// 'LANDSAT/LC09/C02/T1_L2/LC09_016035_20260814'</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="co">//'COPERNICUS/S2_SR_HARMONIZED/20260815T155819_20260815T160714_T17SPV'</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-8-image-composites" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="tutorial-8-image-composites"><span class="header-section-number">5.8</span> Tutorial 8: Image Composites</h2>
@@ -800,28 +837,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">//Compositing involves selecting an aggregation function to </span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">//turn an image collection into a single summary image. </span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">//Reload your cloud masked collection from Tutorial 7. </span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">//How many images are there? </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">//Create an image collection of all the sentinel-2 images from July - September 2026 that cover</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">//Chapel Hill.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">//What if you wanted to produce one image to summarize all of the</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">//images in the image collection? </span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">//What if you wanted to produce one image to summarize all of the</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">//images in the image collection? </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">//We can create a composite image by applying an aggregation function </span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">//to the image collection.</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> compositeLandsat <span class="op">=</span> cleanCollection<span class="op">.</span><span class="fu">median</span>()<span class="op">;</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">//We can create a composite image by applying an aggregation function </span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">//to the image collection.</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co">//var compositeSentinel = imageCollection.median(); </span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co">//Visualize the composite</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co">//other options include median(), min(), max(), etc.</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">//Visualize the composite</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">//other options include mean(), min(), max(), etc.</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">//Make a composite using a different aggregation option. Can you notice any</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co">//differences?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co">//Make a composite using a different aggregation option. Can you notice any</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co">//differences?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="tutorial-9-false-color-visualizations" class="level2" data-number="5.9">
 <h2 data-number="5.9" class="anchored" data-anchor-id="tutorial-9-false-color-visualizations"><span class="header-section-number">5.9</span> Tutorial 9: False Color Visualizations</h2>
