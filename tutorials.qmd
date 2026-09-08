@@ -451,16 +451,20 @@ After completing this tutorial you should be able to:
 var dataset = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2');
 
 //we can filter by a date or set of dates using the following command
-var filter1 = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2').filterDate('2026-01-01', '2026-01-10');
+var filter1 = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2').filterDate('2026-01-01', '2026-01-03');
 //print the image collection. How many images are there? 
 
+
+// add the Sentinel 2 image collection (https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED)
+//Then filter this collection by the same date range. How many images are there? 
 
 //we can filter by a location two different ways. 
 //we can define a lat/lon
 var chapelHill = ee.Geometry.Point([-79.039, 35.9262]);
 
 var filter2 = dataset.filterBounds(chapelHill);
-//How many images are there? 
+//How many images of Chapel Hill are in the Landsat 9 image collection?
+//How many images of Chapel Hill are in the Sentinel-2 image collection? 
 
 //we can also add geometry to filter by using the map interface
 //click the point button at the top left of the map and add a point 
@@ -470,7 +474,7 @@ var filter2 = dataset.filterBounds(chapelHill);
 //see that it adds the geometry to the top tab of our script. 
 //This is our "Import" area, which we'll use more in the future
 
-//change the name from geometry to greenville and filter the image collection
+//change the name from geometry to greenville and filter both image collections
 //to images that cover greenville. 
 //How many images are there? 
 
@@ -488,8 +492,7 @@ var stackedFilter = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
                       .filterBounds(chapelHill)
                       .filter(ee.Filter.lt('CLOUD_COVER', 10));
                       
-
-//how many images include greenville, were taken between Jan 2026 and August 2026 and have a cloud cover of less than 5%?
+//how many Landsat 9 images include greenville, were taken between Jan 2026 and August 2026 and have a cloud cover of less than 5%?
 
 ```
 
