@@ -493,12 +493,11 @@ var stackedFilter = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
                       .filter(ee.Filter.lt('CLOUD_COVER', 10));
                       
 //how many Landsat 9 images include greenville, were taken between Jan 2026 and August 2026 and have a cloud cover of less than 5%?
-
 ```
 
 ## Tutorial 7: Quality Masks and Image Preprocessing
 
-```javascript
+``` javascript
 //Satellite images often contain clouds, cloud shadows,or other poor-quality pixels.
 //Most satellite datasets include one or more Quality Assurance (QA) bands that indicate the quality of each pixel.
 
@@ -594,14 +593,16 @@ function maskLandsatClouds(image) {
   return image.updateMask(clear);
 }
 
-// Sentinel-2 SR Harmonized 
+// Sentinel-2 SR Harmonized, masked with Cloud Score+
 function maskS2clouds(image) {
-  // Select the QA band that stores per-pixel quality flags
-  var qa = image.select('QA60');
-  // Bit 10 = opaque cloud, 11 = cirrus (no shadow flag exists)
-  var badBits = (1 << 10) | (1 << 11);
-  // A pixel is clear if NONE of those bits are turned on
-  var clear = qa.bitwiseAnd(badBits).eq(0);
+  // Look up this image's matching Cloud Score+ image by its ID
+  var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+  var match = csPlus.filter(
+    ee.Filter.eq('system:index', image.get('system:index'))).first();
+  // Scores run 0 (occluded) to 1 (clear)
+  var score = ee.Image(match).select('cs_cdf');
+  // A pixel is clear if its score is at or above the threshold
+  var clear = score.gte(0.60);
   // Keep the clear pixels, drop everything else
   return image.updateMask(clear);
 }
@@ -614,7 +615,6 @@ function maskS2clouds(image) {
 //apply a cloud masking function to these two images
 // 'LANDSAT/LC09/C02/T1_L2/LC09_016035_20260814'
 //'COPERNICUS/S2_SR_HARMONIZED/20260815T155819_20260815T160714_T17SPV'
-
 
 ```
 
@@ -1147,5 +1147,4 @@ After completing this tutorial you should be able to:
 //or it can be a different one. For instance, you can composite the 
 //mean but decide to take the max when reducing to regions.
 //What that returns is the max average value in each region. 
-
 ```
