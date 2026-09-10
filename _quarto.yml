@@ -1,6 +1,8 @@
 project:
   type: book
   output-dir: docs
+  resources:
+    - .nojekyll
 
 book:
   title: "gee"
@@ -24,4 +26,3 @@ format:
     documentclass: scrreprt
 
 editor: visual
-
