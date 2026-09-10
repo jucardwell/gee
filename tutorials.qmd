@@ -686,7 +686,7 @@ Map.addLayer(
 //different things. 
 
 
-//For instance, using the near infrared band ,red, and green band can assess plant density 
+//For instance, using the near infrared band, red, and green band can assess plant density 
 Map.addLayer(
     image, 
     {
@@ -699,6 +699,7 @@ Map.addLayer(
 
 //What can you learn about the CH area from this visualization that you can't
 //see in the natural color? 
+
 
 //Using the SWIR-1, near infrared, and blue bands can assess agricultural health 
 Map.addLayer(
@@ -714,19 +715,68 @@ Map.addLayer(
 //What can you learn about the CH area from this visualization that you can't
 //see in the natural color? 
 
-//Using the SWIR-1,SWIR-2, and blue bands can find geological features
-Map.addLayer(
-    image, 
-    {
-        bands: ['B12', 'B11', 'B2'], 
-        min: 160,
-        max: 2200
-    },
-    'Geology' 
-);
 
-//What can you learn about the CH area from this visualization that you can't
-//see in the natural color? 
+//Wait, doesn't something kind of look off in these visualizations? Especially the vegetation one
+//Are you seeing a wide range of colors, or does one color seem to be
+//dominating almost everything? 
+
+//Here's a hint- these layers use the same Min and Max for all three bands
+//R,G,B bands have a similar min/max, which is why it is ok to use just one
+//min/max for these. But when we replace other bands into the RGB channels
+//the spread of the data can vary pretty substantially
+
+
+//Let's investigate. Run this and look at the printed output:
+
+var ch = ee.Geometry.Polygon(
+        [[[-79.21924695766087, 35.97944424009956],
+          [-79.20139417445775, 35.77247097804019],
+          [-78.830605600239, 35.771356757735944],
+          [-78.89789686000462, 36.01944108881206]]]);
+
+var stats = image.select(['B2','B3','B4','B8','B11']).reduceRegion({
+    reducer: ee.Reducer.percentile([2, 98]),
+    geometry: ch,
+    scale: 20,
+    maxPixels: 1e9
+});
+
+print('2nd and 98th percentile pixel values per band:', stats);
+
+
+// 1. Look at the printed values. Is the range of B8 (NIR) similar to the 
+//    range of B2, B3, or B4? 
+// 2. Now think back to the visualization formula: the min value gets mapped 
+//    to 0 (no color) and the max value gets mapped to 255 (full color), and 
+//    anything above max gets CLIPPED to 255. If a band's real values are 
+//    mostly ABOVE our max of 2200, what happens to that channel?
+
+
+//Instead of one shared min/max for all three bands, you can pass an ARRAY -
+//one value per band, in the same order as your bands list. Use the 
+//percentile values you just printed above to fill these in for your own image.
+
+// Map.addLayer(
+//     image, 
+//     {
+//         bands: ['B8', 'B4', 'B3'], 
+//         min: [800, 160, 160],    // <-- fill in with YOUR printed values
+//         max: [4500, 2200, 2200]  // <-- fill in with YOUR printed values
+//     },
+//     'Vegetation - stretched' 
+// );
+
+// Map.addLayer(
+//     image, 
+//     {
+//         bands: ['B11', 'B8', 'B2'], 
+//         min: [200, 800, 160],    // <-- fill in with YOUR printed values
+//         max: [2500, 4500, 2200]  // <-- fill in with YOUR printed values
+//     },
+//     'Agriculture - stretched' 
+// );
+
+// 4. Compare each stretched layer to its original. What changed? Is it easier to interpret?
 ```
 
 ## Tutorial 10: Spectral Indices, Thresholding, and Masking
@@ -756,10 +806,10 @@ Map.addLayer(
     image, 
     {
         bands: ['B8', 'B4', 'B3'], 
-        min: 160,
-        max: 2500
+        min: [219, 231, 295],    
+        max: [3239, 1630, 1374]  
     },
-    'Vegetation' 
+    'Vegetation - stretched' 
 );
 
 //In this false-color composite, healthy vegetation appears dark red because the
@@ -892,6 +942,7 @@ Map.addLayer(masked,
 
 // Where are the highest NDBI values located?
 //How do these locations compare to the highly vegetated areas identified with NDVI?
+//Do you notice any built up areas that do NOT show up well using NDBI? 
 
 
 // Create a three-class NDBI image using .where().

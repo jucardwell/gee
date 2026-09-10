@@ -187,6 +187,32 @@ var stats = image_collection.median().select('band')
 print(stats);
 ```
 
+### Using Different Min/Max per band
+
+```javascript
+//fill in with bands of interest
+var stats = image.select(['B2','B3','B4','B8','B11']).reduceRegion({
+    reducer: ee.Reducer.percentile([2, 98]),
+    geometry: ch,
+    scale: 20,
+    maxPixels: 1e9
+});
+
+print('2nd and 98th percentile pixel values per band:', stats);
+
+//fill in with bands of interest and values from above
+Map.addLayer(
+    image, 
+    {
+        bands: ['B8', 'B4', 'B3'], 
+        min: [219, 231, 295],    
+        max: [3239, 1630, 1374]  
+    }
+);
+
+
+```
+
 ### Setting Color Palette for Single-Band Image
 
 Start by adding this [repo](https://code.earthengine.google.com/?accept_repo=users/gena/packages) to your GEE account. You can view all the palette options [here](https://github.com/gee-community/ee-palettes)
@@ -336,7 +362,8 @@ var masked_image = image.updateMask(mask);
 
 ### Cloud Masking
 
-```
+```javascript
+
 //Landsat 8/9 Collection 2 Level 2 
 function maskLandsatClouds(image) {
   // Select the QA band that stores per-pixel quality flags

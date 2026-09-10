@@ -13,17 +13,21 @@
 
 ## Indices
 
-- **NDVI** (Normalized Difference Vegetation Index): `(NIR - Red) / (NIR + Red)`
+- **NDVI** (Normalized Difference Vegetation Index) green vegetation from everything else: `(NIR - Red) / (NIR + Red)`
 
-- **EVI** (Enhanced Vegetation Index): corrects for atmospheric effects and canopy background, better in high-biomass areas: `2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)`
+- **EVI** (Enhanced Vegetation Index) vegetation, without saturating over dense canopy; corrects for atmospheric effects and canopy background, better in high-biomass areas: `2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)`
 
-- **NDWI** (Normalized Difference Water Index): `(Green - NIR) / (Green + NIR)`
+- **SAVI** (Soil-Adjusted Vegetation Index) vegetation where bare soil shows through: `((NIR - Red) / (NIR + Red + 0.5)) * 1.5`
 
-- **NDBI** (Normalized Difference Built-up Index): `(SWIR1 - NIR) / (SWIR1 + NIR)`
+- **NDWI** (Normalized Difference Water Index) open water from land: `(Green - NIR) / (Green + NIR)`
 
-- **NBR** (Normalized Burn Ratio): `(NIR - SWIR2) / (NIR + SWIR2)`
+- **MNDWI** (Modified Normalized Difference Water Index) open water, with built-up suppressed: `(Green - SWIR1) / (Green + SWIR1)`
 
-- **BSI** (Bare Soil Index): `((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue))`
+- **NDBI** (Normalized Difference Built-up Index) built-up and bare surfaces: `(SWIR1 - NIR) / (SWIR1 + NIR)`
+
+- **NBR** (Normalized Burn Ratio) burned from unburned: `(NIR - SWIR2) / (NIR + SWIR2)`
+
+- **NDSI** (Normalized Difference Snow Index) snow and ice from cloud: `(Green - SWIR1) / (Green + SWIR1)`
 
 ## Visualizations
 

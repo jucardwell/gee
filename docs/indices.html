@@ -231,12 +231,14 @@ ul.task-list li input[type="checkbox"] {
 <section id="indices" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="indices"><span class="header-section-number">3.2</span> Indices</h2>
 <ul>
-<li><p><strong>NDVI</strong> (Normalized Difference Vegetation Index): <code>(NIR - Red) / (NIR + Red)</code></p></li>
-<li><p><strong>EVI</strong> (Enhanced Vegetation Index): corrects for atmospheric effects and canopy background, better in high-biomass areas: <code>2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)</code></p></li>
-<li><p><strong>NDWI</strong> (Normalized Difference Water Index): <code>(Green - NIR) / (Green + NIR)</code></p></li>
-<li><p><strong>NDBI</strong> (Normalized Difference Built-up Index): <code>(SWIR1 - NIR) / (SWIR1 + NIR)</code></p></li>
-<li><p><strong>NBR</strong> (Normalized Burn Ratio): <code>(NIR - SWIR2) / (NIR + SWIR2)</code></p></li>
-<li><p><strong>BSI</strong> (Bare Soil Index): <code>((SWIR1 + Red) - (NIR + Blue)) / ((SWIR1 + Red) + (NIR + Blue))</code></p></li>
+<li><p><strong>NDVI</strong> (Normalized Difference Vegetation Index) green vegetation from everything else: <code>(NIR - Red) / (NIR + Red)</code></p></li>
+<li><p><strong>EVI</strong> (Enhanced Vegetation Index) vegetation, without saturating over dense canopy; corrects for atmospheric effects and canopy background, better in high-biomass areas: <code>2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)</code></p></li>
+<li><p><strong>SAVI</strong> (Soil-Adjusted Vegetation Index) vegetation where bare soil shows through: <code>((NIR - Red) / (NIR + Red + 0.5)) * 1.5</code></p></li>
+<li><p><strong>NDWI</strong> (Normalized Difference Water Index) open water from land: <code>(Green - NIR) / (Green + NIR)</code></p></li>
+<li><p><strong>MNDWI</strong> (Modified Normalized Difference Water Index) open water, with built-up suppressed: <code>(Green - SWIR1) / (Green + SWIR1)</code></p></li>
+<li><p><strong>NDBI</strong> (Normalized Difference Built-up Index) built-up and bare surfaces: <code>(SWIR1 - NIR) / (SWIR1 + NIR)</code></p></li>
+<li><p><strong>NBR</strong> (Normalized Burn Ratio) burned from unburned: <code>(NIR - SWIR2) / (NIR + SWIR2)</code></p></li>
+<li><p><strong>NDSI</strong> (Normalized Difference Snow Index) snow and ice from cloud: <code>(Green - SWIR1) / (Green + SWIR1)</code></p></li>
 </ul>
 </section>
 <section id="visualizations" class="level2" data-number="3.3">
