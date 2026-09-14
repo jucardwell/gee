@@ -819,13 +819,28 @@ Map.addLayer(
 //But what if we wanted to represent vegetation health mathematically? 
 //We can use GEEs band math, where we combine multiple spectral bands using mathematical formulas
 
+
+//Before we do any math with these values, we need to convert them into actual
+//reflectance. Sentinel-2 surface reflectance is stored as an integer: the real
+//value was multiplied by 10000 so it could be saved without a decimal point.
+//Landsat Collection 2 uses a scale AND an offset (multiply by 0.0000275,
+//then subtract 0.2).
+
+//Every dataset documents its scale and offset on its catalog page, and nowhere
+//in the image itself. New dataset, check the catalog page first.
+
+//The rule: scale before any analysis.
+
+var scaled = image.divide(10000);
+
+
 //One of the most widely used spectral indices is the Normalized Difference
 //Vegetation Index (NDVI). NDVI compares the near-infrared (NIR) and red bands
 //to estimate the presence and health of vegetation.
 
 //Get bands
-var nir = image.select('B8');
-var red = image.select('B4');
+var nir = scaled.select('B8');
+var red = scaled.select('B4');
 
 //Calculate the numerator and the denominator using band subtraction and addition
 var numerator = nir.subtract(red);
@@ -849,12 +864,25 @@ Map.addLayer(ndvi, {
 //in a single step, using the normalizedDifference method.
 
 //Now use the built-in normalizedDifference function to achieve the same outcome.
-var ndviND = image.normalizedDifference(['B8', 'B4']);
+var ndviND = scaled.normalizedDifference(['B8', 'B4']);
 Map.addLayer(ndviND, {
     min: -1,
     max: 1,
     palette: ['red', 'white', 'green']
 }, 'NDVI normalizedDiff');
+
+
+//A note on that scaling step: NDVI would have come out the same on the raw
+//stored values, because a normalized difference cancels a constant multiplier
+//out of the top and the bottom.
+
+//That is not true of every index. EVI and SAVI have bare constants in their
+//formulas (a +1, an L of 0.5), and a constant only means what it is supposed
+//to mean if your data is in real reflectance units. Run those on unscaled
+//values and the result is wrong by a wide margin, and it still looks plausible.
+
+//Landsat's additive offset never cancels, in any index.
+
 
 //NDVI gives us a continuous value of vegetation
 //let's say that we want to categorize our data into highly vegetated and not highly vegetated
