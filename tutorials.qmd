@@ -876,12 +876,25 @@ Map.addLayer(ndviND, {
 //stored values, because a normalized difference cancels a constant multiplier
 //out of the top and the bottom.
 
-//That is not true of every index. EVI and SAVI have bare constants in their
-//formulas (a +1, an L of 0.5), and a constant only means what it is supposed
-//to mean if your data is in real reflectance units. Run those on unscaled
-//values and the result is wrong by a wide margin, and it still looks plausible.
-
-//Landsat's additive offset never cancels, in any index.
+//Not every index is a normalized difference. Some have plain numbers in the formula. SAVI adds a soil adjustment factor, L, for //areas where bare ground shows through the canopy:
+ 
+//SAVI = ((NIR - Red) / (NIR + Red + L)) * (1 + L), where L = 0.5
+ 
+//Chaining that many terms gets hard to read, so Earth Engine gives us .expression(), which takes the formula as text plus an object saying what each name in it refers to.
+ 
+var savi = scaled.expression(
+    '((NIR - RED) / (NIR + RED + 0.5)) * 1.5',
+    {
+        NIR: scaled.select('B8'),
+        RED: scaled.select('B4')
+    }
+);
+ 
+Map.addLayer(savi, {
+    min: -1,
+    max: 1,
+    palette: ['red', 'white', 'green']
+}, 'SAVI');
 
 
 //NDVI gives us a continuous value of vegetation
