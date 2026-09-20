@@ -1044,7 +1044,7 @@ var point_collection = ee.FeatureCollection(points);
 
 
 //Click on Assets and find the "New" button. 
-//Upload the "North_Carolina_Counties.geojson" from the course website
+//Upload the "nc_counties" file as a zip. 
 
 
 //Once it has fully uploaded click the "->" button next to the asset
@@ -1070,15 +1070,20 @@ var drought = ee.ImageCollection("GRIDMET/DROUGHT").first()
 //You export images directly to your Google Drive using the following syntax
 
 
+// var proj = IMAGE.projection(); // if exporting a raw image, use the image itself
+// var proj = COLLECTION.first().projection(); // if exporting a composite (median, mean, mosaic), use the original collection instead
+
 // Export.image.toDrive({
 //   image: IMAGE, //this is the image you want to export
-//   description: "NAME" ,//this is what you want to name the file
-//   scale: NUMBER, // Scale. Find this from the catalog entry as pixel size
-//   fileFormat: 'GeoTIFF' // Specify the file format
+//   description: "NAME", //this is what you want to name the file
+//   scale: proj.nominalScale(), //pixel size, pulled from the image
+//   crs: proj.crs(), //coordinate reference system, pulled from the image
+//   maxPixels: 1e9 //allows larger exports
 // });
 
-
 //Export your clipped image to your google drive
+//Exporting is not automatic. Go to the Tasks tab and click RUN.
+
 ```
 
 ## Tutorial 12: Mapping Over Image Collections
@@ -1091,71 +1096,127 @@ After completing this tutorial you should be able to:
 
 ``` javascript
 
-//In Tutorial 7, we used .map() to apply a cloud masking function to every image 
-//in a Landsat image collection. The same approach can be used for many other tasks, 
-//such as unit conversions, calculating spectral indices,or adding new bands to every image.
-
-
 //"Mapping" over an image collection involves applying the same operation 
 //over the entire image collection. 
 
+//Let's map two functions over a Landsat 9 collection: one that masks clouds and one that rescales the bands to surface reflectance. Remember, we now always scale before any analysis.
 
-//For instance, let's say we want to look at rainfall during Hurricane Florence
-//using the RTMA dataset. 
+//region of interest for nc
+var roi = ee.Geometry.Rectangle([-84.3219, 33.7529, -75.4606, 36.5880]);
 
+// Load the Landsat 9 Level 2 collection and filter it to summer 2025 over the ROI
+var landsat9 = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2')
+  .filterBounds(roi)
+  .filterDate('2025-06-01', '2025-09-01');
+  
+//how maany images in this collection?
 
-//The precipitation variable in the RTMA dataset is in kg/m^2
-//which is not an easily interpretable value. 
+//rmember our function for masking clouds
+//Landsat 8/9 Collection 2 Level 2 
+function maskLandsatClouds(image) {
+  // Select the QA band that stores per-pixel quality flags
+  var qa = image.select('QA_PIXEL');
+  // Bit 1 = dilated cloud, 2 = cirrus, 3 = cloud, 4 = cloud shadow
+  var badBits = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4);
+  // A pixel is clear if NONE of those bits are turned on
+  var clear = qa.bitwiseAnd(badBits).eq(0);
+  // Keep the clear pixels, drop everything else
+  return image.updateMask(clear);
+}
 
-//We might want to add a new band called "precip_inches" to every
-//image in an image collection that has been filtered to North Carolina
-//during the dates of hurricane florence.
+// now, here is a function for scaling the values
+function scaleLandsat(image) {
+  var scaled = image.select('SR_B.').multiply(0.0000275).add(-0.2);
+  // Replace the original bands with the scaled ones (true = overwrite)
+  return image.addBands(scaled, null, true);
+}
 
-//We would do that by running the following 
-
-
-// // Define the region of interest (ROI) - North Carolina
-// var roi = ee.Geometry.Rectangle([-84.3219, 33.7529, -75.4606, 36.5880]);
-
-// // Load the RTMA ImageCollection for a period around Hurricane Florence
-// var rtmaCollection = ee.ImageCollection('NOAA/NWS/RTMA')
-//   .filterDate('2018-09-10', '2018-09-20')
-//   .select('ACPC01');
-
-// // Function to convert precipitation from kg/m² to inches
-// var kgm2ToInches = function(image) {
-//   var precipitation = image.select('ACPC01');
-//   var precipitationInches = precipitation.multiply(0.0393701).rename('precip_inches');
-//   return image.addBands(precipitationInches);
-// };
-
-// // Map the conversion function over the RTMA collection
-// var precipitationInchesCollection = rtmaCollection.map(kgm2ToInches);
-
-
-//Print the image collection. If you look at the bands in any of the images
-//there should be a new band called 'precip_inches'
-
-//Clip the image collection to the area of interest
+//we use the .map command to apply those functions to each image
+var landsat9Clean = landsat9.map(maskLandsatClouds).map(scaleLandsat);
 
 
-//Write a script that creates a composite of the 'precip_inches' band 
-// of that image collection using the .sum() command. 
-//hint: you also need to use .select('precip_inches') before you use the 
-//sum command to only sum the precip_inches band
+//Now it's your turn to write a third function that calculates NDVI 
+//and adds it to every image as a new band. So far we have only used the bands that 
+//came with the data. Here you will calculate a new band from two existing ones 
+//and attach it to the image.
+
+//Here is the skeleton of the function:
+
+// function addNDVI(image) {
+//   var ndvi = ...;
+//   return ...;
+// }
+
+//1. The function takes one input, called image. When you use .map(), GEE hands your 
+//   function one image from the collection at a time, and this name is what you call it inside 
+//   the function.
+
+//2. Calculate NDVI using .normalizedDifference() on the image and save it in a variable 
+//   called ndvi. Order does matter, so be sure to put the NIR band first
+
+//3. By default, the new band is named 'nd'. Give it a better name by adding 
+//   .rename('NDVI') to the end of the line you wrote in step 2.
+
+//4. ndvi is currently a separate image. To attach it to the original image, use .addBands().
+//   For example, image.addBands(otherImage) returns the original image with otherImage's 
+//   bands added on. Return the result. Every function you use with .map() must return an image.
+
+//5. Map your function over landsat9Clean, save the result in a new variable, and print it.
+//   Open the first image and look at its bands. You should see 'NDVI' next to the original bands.
 
 
-//Add the composite to the map with appropriate visualization parameters
+//Now create a median composite of the NDVI band and clip it to the ROI.
+//hint: use .select('NDVI') before you use .median()
+
+//Add the composite to the map with appropriate visualization parameters.
+//hint: NDVI ranges from -1 to 1
 
 
-//Which areas of North Carolina recieved the most rainfall during Florence?
+//Which areas of North Carolina have the highest NDVI in summer? Why might that be?
 
-//Filter RTMA to dates for Hurricane Helene in WNC. 
 
-//Visit the data catalog entry for RTMA. Identify the wind gust band and write a function that
-//converts gusts from m/s to mph. Map that across the filtered image 
+//MINI-CHALLENGE: Now you try it on a different dataset!
 
-//Use a composite with the .max() function to visualize maximum wind gust
+//Hurricane Florence made landfall in North Carolina in September 2018. Let's look at
+//how much rain fell using the RTMA dataset.
+
+//The precipitation band in RTMA ('ACPC01') is in kg/m^2, which is not an easily
+//interpretable value. Write a function that adds a new band called "precip_inches"
+//to every image, then map it over the collection.
+//hint: multiply by 0.0393701 to convert to inches
+
+//1. Load the RTMA ImageCollection ('NOAA/NWS/RTMA'), filter it to 2018-09-10 through
+//   2018-09-20, and select the 'ACPC01' band. Reuse your roi from above.
+//2. Write a function that converts precipitation to inches and adds it as a new band
+//3. Map the function over the collection and print it. Check that 'precip_inches' exists
+//4. Create a composite of the 'precip_inches' band using .sum(), and clip it to the ROI
+//   hint: use .select('precip_inches') before you use .sum()
+//5. Add the composite to the map with appropriate visualization parameters
+
+
+
+//Which areas of North Carolina received the most rainfall during Florence?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///answer to NDVI function
+// function addNDVI(image) {
+//   var ndvi = image.normalizedDifference(['SR_B5', 'SR_B4']).rename('NDVI');
+//   return image.addBands(ndvi);
+// }
 ```
 
 ## Tutorial 13: Reducers
@@ -1200,7 +1261,7 @@ After completing this tutorial you should be able to:
 
 
 
-//write a command to print the output of this reduction
+//write a command to print the output of this reduction. Can you figure out the storage structure of this output? 
 
 
 //To export this file to your drive, you would use the following syntax

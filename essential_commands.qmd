@@ -461,20 +461,16 @@ var output = image.reduceRegions({
 
 ```javascript
 
-//get the image projection
-var projection = image.projection();
+var proj = IMAGE.projection(); // if exporting a raw image, use the image itself
+var proj = COLLECTION.first().projection(); // if exporting a composite (median, mean, mosaic), use the original collection instead
 
-//get the pixel size
-var scale = projection.nominalScale();
-
-//export the image
 Export.image.toDrive({
-    image: image, //image to export
-    description: 'File_Name', //name of the exported file
-    scale: scale, //pixel size
-    fileFormat: 'GeoTIFF' //output format
-});
-
+   image: IMAGE, //this is the image you want to export
+   description: "NAME", //this is what you want to name the file
+   scale: proj.nominalScale(), //pixel size, pulled from the image
+   crs: proj.crs(), //coordinate reference system, pulled from the image
+   maxPixels: 1e9 //allows larger exports
+ });
 ```
 
 ### Export a Feature Collection
