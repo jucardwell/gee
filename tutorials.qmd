@@ -1168,8 +1168,7 @@ var landsat9Clean = landsat9.map(maskLandsatClouds).map(scaleLandsat);
 //Now create a median composite of the NDVI band and clip it to the ROI.
 //hint: use .select('NDVI') before you use .median()
 
-//Add the composite to the map with appropriate visualization parameters.
-//hint: NDVI ranges from -1 to 1
+//Add the composite to the map with appropriate visualization parameters. Try .3-.8
 
 
 //Which areas of North Carolina have the highest NDVI in summer? Why might that be?
