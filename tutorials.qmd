@@ -615,7 +615,6 @@ function maskS2clouds(image) {
 //apply a cloud masking function to these two images
 // 'LANDSAT/LC09/C02/T1_L2/LC09_016035_20260814'
 //'COPERNICUS/S2_SR_HARMONIZED/20260815T155819_20260815T160714_T17SPV'
-
 ```
 
 ## Tutorial 8: Image Composites
@@ -1057,7 +1056,8 @@ var point_collection = ee.FeatureCollection(points);
 
 //Clip the following image to North Carolina using the following syntax
 //and add it to the map
-var drought = ee.ImageCollection("GRIDMET/DROUGHT").first()
+//Only clip at the end of your workflow, right before you display or export
+var drought = ee.ImageCollection("GRIDMET/DROUGHT").first().select("pdsi")
 
 //var clipped = image.clip(geometry)
 
@@ -1076,8 +1076,8 @@ var drought = ee.ImageCollection("GRIDMET/DROUGHT").first()
 // Export.image.toDrive({
 //   image: IMAGE, //this is the image you want to export
 //   description: "NAME", //this is what you want to name the file
-//   scale: proj.nominalScale(), //pixel size, pulled from the image
-//   crs: proj.crs(), //coordinate reference system, pulled from the image
+//   scale: proj.nominalScale().getInfo(), //pixel size, pulled from the image
+//   crs: proj.wkt().getInfo(), //coordinate reference system, pulled from the image
 //   maxPixels: 1e9 //allows larger exports
 // });
 
@@ -1299,4 +1299,184 @@ After completing this tutorial you should be able to:
 //or it can be a different one. For instance, you can composite the 
 //mean but decide to take the max when reducing to regions.
 //What that returns is the max average value in each region. 
+```
+
+## Tutorial 14: Classification
+
+After completing this tutorial you should be able to:
+
+- Explain the difference between supervised and unsupervised classification
+- Create a labeled training dataset using the geometry tools
+- Train CART and Random Forest classifiers and apply them to an image
+- Perform an unsupervised classification using k-means clustering
+- Compare classification techniques
+
+``` javascript
+//Classification assigns every pixel in an image to a category (a "class")
+//based on its spectral values. In a SUPERVISED classification, we give the
+//algorithm labeled examples of each class (training data), and it learns
+//what each class looks like. In an UNSUPERVISED classification, the algorithm
+//groups similar pixels on its own, and we label the groups afterward.
+
+//chapel hill study area
+var ch = ee.Geometry.Point([-79.06, 35.91]);
+
+//get best recent sentinel2 image and scale
+var ch_image = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+    .filterBounds(ch)
+    .filterDate('2026-04-01', '2026-09-01')
+    .sort('CLOUDY_PIXEL_PERCENTAGE')
+    .first()
+    .divide(10000);
+
+print(ch_image)
+
+//add image to the map.
+var visParams = {
+    bands: ['B4', 'B3', 'B2'],
+    min: 0,
+    max: .25
+};
+
+Map.addLayer(ch_image, visParams);
+
+
+///We are going to do 4 classes
+// Water - 1
+// Developed - 2
+// Forest - 3
+// Agriculture - 4
+
+//Follow instructions on page 29 to create training dataset
+// https://docs.google.com/document/d/1UCB900oCdJERca-2WUeDlCu52MjPKJxETJ_jJcLM0bM/edit?tab=t.0
+
+
+//combine training feature collections.
+var trainingFeatures = ee.FeatureCollection([
+    forest, developed, water, agriculture
+]).flatten();
+
+
+// Define prediction bands.
+var predictionBands = [
+    'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7',
+    'B8', 'B8A', 'B11', 'B12'
+];
+
+// Sample training points.
+var classifierTraining = ch_image.select(predictionBands)
+    .sampleRegions({
+        collection: trainingFeatures,
+        properties: ['class'],
+        scale: 10
+    });
+
+//this now includes the band values of each training point 
+print(classifierTraining)
+
+//we will put that into our classifier
+//We will use a standard CART (Classification and Regression Tree) classifier
+//CART builds a decision tree, a series of yes/no questions about band values
+//(e.g. is B8 > 0.2?) that best separate the training points into their classes
+
+
+//////////////// CART Classifier ///////////////////
+
+// Train a CART Classifier.
+var classifier = ee.Classifier.smileCart().train({
+    features: classifierTraining,
+    classProperty: 'class',
+    inputProperties: predictionBands
+});
+
+
+// Classify the image.
+var classified = ch_image.select(predictionBands).classify(classifier);
+
+// Define classification image visualization parameters.
+var classificationVis = {
+    min: 1,
+    max: 4,
+    palette: ['blue', 'red', 'green', 'orange']
+};
+
+// Add the classified image to the map.
+Map.addLayer(classified, classificationVis, 'CART classified');
+
+
+/////////////// Random Forest Classifier /////////////////////
+//We can also use a machine-learning based classifier
+//A Random Forest builds many decision trees, each trained on a random subset
+//of the training data. Each tree "votes" and the class with the most votes wins.
+//The number in smileRandomForest() is the number of trees.
+
+// Train RF classifier.
+var RFclassifier = ee.Classifier.smileRandomForest(50).train({
+    features: classifierTraining,
+    classProperty: 'class',
+    inputProperties: predictionBands
+});
+
+// Classify image.
+var RFclassified = ch_image.select(predictionBands).classify(
+    RFclassifier);
+
+// Add classified image to the map.
+Map.addLayer(RFclassified, classificationVis, 'RF classified');
+
+//Compare the CART and RF classifications. Which looks more accurate? 
+//Where do they make mistakes?
+
+
+//////////////// Unsupervised classification ////////////////
+
+//In an unsupervised classification, we don't give the algorithm any labels.
+//Instead, it finds groups (clusters) of pixels with similar spectral values,
+//and we decide what each cluster represents afterward.
+
+//Instead of sampleRegions(), which samples at locations we chose, we use
+//sample(), which randomly samples pixels from a region. We'll sample 1000
+//pixels from the image footprint. tileScale helps avoid memory errors.
+
+// Make the training dataset.
+var training = ch_image.select(predictionBands).sample({
+    region: ch_image.geometry(),
+    scale: 10,
+    numPixels: 1000,
+    tileScale: 8
+});
+
+//print the training dataset. How is it different from classifierTraining?
+
+
+//We will use k-means clustering. K-means places k random starting points in
+//"spectral space" (where each band is an axis), assigns each pixel to its
+//closest point, calculates the mean of each group (the centroid), and repeats
+//until the centroids stop moving much.
+
+//We'll ask for 4 clusters, the same number as our supervised classes
+
+// Instantiate the clusterer and train it.
+var clusterer = ee.Clusterer.wekaKMeans(4).train(training);
+
+// Cluster the input using the trained clusterer.
+var Kclassified = ch_image.select(predictionBands).cluster(clusterer);
+
+// Display the clusters with random colors.
+//we use random colors because the algorithm doesn't know which cluster
+//is water, forest, etc. Cluster 0 is NOT necessarily water!
+Map.addLayer(Kclassified.randomVisualizer(), {},
+    'K-means classified - random colors');
+
+
+//Use the Inspector to figure out which cluster number (0-3) matches each
+//land cover type. Then fill in the ?s below to remap the clusters to our 
+//class numbers and display it with classificationVis
+
+// var Klabeled = Kclassified.remap([0, 1, 2, 3], [?, ?, ?, ?]);
+
+
+//How does the k-means classification compare to CART and RF? 
+//Did each cluster match up neatly with one land cover type?
+
 ```

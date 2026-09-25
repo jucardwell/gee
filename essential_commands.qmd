@@ -461,16 +461,16 @@ var output = image.reduceRegions({
 
 ```javascript
 
-var proj = IMAGE.projection(); // if exporting a raw image, use the image itself
-var proj = COLLECTION.first().projection(); // if exporting a composite (median, mean, mosaic), use the original collection instead
+// var proj = IMAGE.projection(); // if exporting a raw image, use the image itself
+// var proj = COLLECTION.first().projection(); // if exporting a composite (median, mean, mosaic), use the original collection instead
 
-Export.image.toDrive({
-   image: IMAGE, //this is the image you want to export
-   description: "NAME", //this is what you want to name the file
-   scale: proj.nominalScale(), //pixel size, pulled from the image
-   crs: proj.crs(), //coordinate reference system, pulled from the image
-   maxPixels: 1e9 //allows larger exports
- });
+// Export.image.toDrive({
+//   image: IMAGE, //this is the image you want to export
+//   description: "NAME", //this is what you want to name the file
+//   scale: proj.nominalScale().getInfo(), //pixel size, pulled from the image
+//   crs: proj.wkt().getInfo(), //coordinate reference system, pulled from the image
+//   maxPixels: 1e9 //allows larger exports
+// });
 ```
 
 ### Export a Feature Collection

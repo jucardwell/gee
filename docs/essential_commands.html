@@ -667,16 +667,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="export-an-image" class="level3" data-number="4.9.1">
 <h3 data-number="4.9.1" class="anchored" data-anchor-id="export-an-image"><span class="header-section-number">4.9.1</span> Export an Image</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> proj <span class="op">=</span> IMAGE<span class="op">.</span><span class="fu">projection</span>()<span class="op">;</span> <span class="co">// if exporting a raw image, use the image itself</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> proj <span class="op">=</span> COLLECTION<span class="op">.</span><span class="fu">first</span>()<span class="op">.</span><span class="fu">projection</span>()<span class="op">;</span> <span class="co">// if exporting a composite (median, mean, mosaic), use the original collection instead</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">// var proj = IMAGE.projection(); // if exporting a raw image, use the image itself</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">// var proj = COLLECTION.first().projection(); // if exporting a composite (median, mean, mosaic), use the original collection instead</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>Export<span class="op">.</span><span class="at">image</span><span class="op">.</span><span class="fu">toDrive</span>({</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>   <span class="dt">image</span><span class="op">:</span> IMAGE<span class="op">,</span> <span class="co">//this is the image you want to export</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>   <span class="dt">description</span><span class="op">:</span> <span class="st">"NAME"</span><span class="op">,</span> <span class="co">//this is what you want to name the file</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>   <span class="dt">scale</span><span class="op">:</span> proj<span class="op">.</span><span class="fu">nominalScale</span>()<span class="op">,</span> <span class="co">//pixel size, pulled from the image</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>   <span class="dt">crs</span><span class="op">:</span> proj<span class="op">.</span><span class="fu">crs</span>()<span class="op">,</span> <span class="co">//coordinate reference system, pulled from the image</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>   <span class="dt">maxPixels</span><span class="op">:</span> <span class="fl">1e9</span> <span class="co">//allows larger exports</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a> })<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Export.image.toDrive({</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">//   image: IMAGE, //this is the image you want to export</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">//   description: "NAME", //this is what you want to name the file</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">//   scale: proj.nominalScale().getInfo(), //pixel size, pulled from the image</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">//   crs: proj.wkt().getInfo(), //coordinate reference system, pulled from the image</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">//   maxPixels: 1e9 //allows larger exports</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">// });</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="export-a-feature-collection" class="level3" data-number="4.9.2">
 <h3 data-number="4.9.2" class="anchored" data-anchor-id="export-a-feature-collection"><span class="header-section-number">4.9.2</span> Export a Feature Collection</h3>
