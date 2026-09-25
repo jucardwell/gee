@@ -1,4 +1,4 @@
-# Essential Commands
+# Essential Commands and Workshop Keys
 
 ## Accessing Images and Image Collections
 
@@ -481,5 +481,237 @@ Export.table.toDrive({
     description: 'File_Name',
     fileFormat: 'CSV'
 });
+
+```
+
+## Workshop 1 Answer Key
+```javascript
+var asheville = ee.Geometry.Point([-82.57076639290078, 35.593981574758736]);
+
+//find after-helene imagery
+//for each image collection, look at the number of images that match. I would then individually
+//visualize each image to determine the best fit. 
+//sent-2
+var sent2 = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED").
+                                      filterBounds(asheville).
+                                      filterDate('2024-09-30', '2024-10-15')
+print(sent2)
+
+//3 potential images
+//visualize first
+var sent_1 = ee.Image('COPERNICUS/S2_SR_HARMONIZED/20241002T161111_20241002T161350_T17SLV')
+Map.addLayer(sent_1, {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000})
+//lots of clouds right over asheville, not a good choice
+
+//visualize second
+var sent_2 = ee.Image('COPERNICUS/S2_SR_HARMONIZED/20241007T161049_20241007T161840_T17SLV')
+Map.addLayer(sent_2, {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000})
+//Great choice!
+
+//don't even need to visualize third because the second is acceptable and closer to end of helene
+
+//landsat-8
+var landsat8 = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2").
+                                    filterBounds(asheville).
+                                    filterDate('2024-09-30', '2024-10-15')
+print(landsat8)
+
+//only one image availabe
+var landsat8_image = ee.Image('LANDSAT/LC08/C02/T1_L2/LC08_018035_20241001')
+Map.addLayer(landsat8_image, {bands: ['SR_B4', 'SR_B3', 'SR_B2']})
+//clouds only :( forget about it
+
+
+//landsat-9
+var landsat9 = ee.ImageCollection("LANDSAT/LC09/C02/T1_L2").
+                                    filterBounds(asheville).
+                                    filterDate('2024-09-30', '2024-10-15')
+print(landsat9)
+
+//only one image availabe
+var landsat9_image = ee.Image('LANDSAT/LC09/C02/T1_L2/LC09_018035_20241009')
+Map.addLayer(landsat9_image, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min: 7000, max:13000})
+//also an acceptable image, but lower resolution than sentinel2 and 2 days later, so Sentinel-2 is probably best
+
+
+//MASK CLOUDS
+//you only need the function once
+// Sentinel-2 SR Harmonized, masked with Cloud Score+
+function maskS2clouds(image) {
+  // Look up this image's matching Cloud Score+ image by its ID
+  var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+  var match = csPlus.filter(
+    ee.Filter.eq('system:index', image.get('system:index'))).first();
+  // Scores run 0 (occluded) to 1 (clear)
+  var score = ee.Image(match).select('cs_cdf');
+  // A pixel is clear if its score is at or above the threshold
+  var clear = score.gte(0.60);
+  // Keep the clear pixels, drop everything else
+  return image.updateMask(clear);
+}
+
+//apply the function to the script
+var sentinel2Mask = maskS2clouds(sent_2)
+Map.addLayer(sentinel2Mask, {bands: ['B4', 'B3', 'B2'], min: 0, max: 3000})
+
+
+```
+
+## Workshop 2 Answer Key
+```javascript
+
+//GEOG 567 Workshop #2 Answer Key
+//Vegetation health in the southern San Joaquin Valley, 2019 vs 2022
+
+
+//define study area
+var studyarea = ee.Geometry.Polygon(
+        [[-120.19993930468863, 36.826631173862694],
+          [-120.19993930468863, 35.37984489565024],
+          [-118.91453891406363, 35.37984489565024],
+          [-118.91453891406363, 36.826631173862694]]);
+
+Map.centerObject(studyarea, 8);
+
+
+//define cloud mask function for sentinel-2
+function maskS2clouds(image) {
+  // Look up this image's matching Cloud Score+ image by its ID
+  var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+  var match = csPlus.filter(
+    ee.Filter.eq('system:index', image.get('system:index'))).first();
+  // Scores run 0 (occluded) to 1 (clear)
+  var score = ee.Image(match).select('cs_cdf');
+  // A pixel is clear if its score is at or above the threshold
+  var clear = score.gte(0.60);
+  // Keep the clear pixels, drop everything else
+  return image.updateMask(clear);
+}
+
+
+//I chose the median because it takes the middle value at each pixel, so any
+//clouds or shadows that the mask missed (which are unusually bright or dark)
+//will not pull the composite the way they would with the mean. Max would
+//favor leftover clouds and min would favor shadows.
+
+//filter data, apply cloud mask, take median, clip, scale
+var pre = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+                            .filterBounds(studyarea)
+                            .filterDate('2019-07-01', '2019-09-01')
+                            .map(maskS2clouds)
+                            .median()
+                            .clip(studyarea)
+                            .divide(10000);
+
+Map.addLayer(pre, {bands: ['B4', 'B3', 'B2'], min: 0, max: 0.3}, '2019 true color');
+
+
+//filter data, apply cloud mask, take median, clip, scale
+var post = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+                            .filterBounds(studyarea)
+                            .filterDate('2022-07-01', '2022-09-01')
+                            .map(maskS2clouds)
+                            .median()
+                            .clip(studyarea)
+                            .divide(10000);
+
+Map.addLayer(post, {bands: ['B4', 'B3', 'B2'], min: 0, max: 0.3}, '2022 true color');
+
+
+//WRITE A FUNCTION TO CALCULATE EVI (this creates an image with ONLY EVI)
+
+var calcEVI = function(image){
+    var evi = image.expression(
+        '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
+        {
+            NIR: image.select('B8'),
+            RED: image.select('B4'),
+            BLUE: image.select('B2')
+        }
+    ).rename('EVI');
+    return evi;
+};
+
+//pre and post are single images (the median turned each collection into
+//one image), so we call the function directly on them
+var evi_pre = calcEVI(pre);
+var evi_post = calcEVI(post);
+
+
+
+//IF YOU WANTED TO WRITE A FUNCTION TO ADD EVI AS A BAND
+
+var addEVI = function(image){
+    var evi = image.expression(
+        '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
+        {
+            NIR: image.select('B8'),
+            RED: image.select('B4'),
+            BLUE: image.select('B2')
+        }
+    ).rename('EVI');
+    return image.addBands(evi);
+};
+
+//call the function directly, then select the EVI band
+// var evi_pre = addEVI(pre).select('EVI');
+// var evi_post = addEVI(post).select('EVI');
+
+
+
+//IF YOU DIDN'T WANT TO WRITE A FUNCTION
+
+// var evi_pre = pre.expression(
+//     '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
+//     {
+//         NIR: pre.select('B8'),
+//         RED: pre.select('B4'),
+//         BLUE: pre.select('B2')
+//     }
+// ).rename('EVI');
+
+// var evi_post = post.expression(
+//     '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))',
+//     {
+//         NIR: post.select('B8'),
+//         RED: post.select('B4'),
+//         BLUE: post.select('B2')
+//     }
+// ).rename('EVI');
+
+
+
+//visualize EVI for each year
+Map.addLayer(evi_pre, {min: 0, max: 0.8, palette: ['white', 'green']}, 'EVI 2019');
+Map.addLayer(evi_post, {min: 0, max: 0.8, palette: ['white', 'green']}, 'EVI 2022');
+
+
+//calculate the change in EVI (2022 minus 2019)
+//negative values mean EVI went down during the drought
+var evi_change = evi_post.subtract(evi_pre);
+
+Map.addLayer(evi_change, {min: -0.5, max: 0.5, palette: ['red', 'white', 'green']}, 'EVI change');
+
+
+//binary classification: 1 where EVI decreased by more than 0.10, 0 everywhere else
+var evi_decline = evi_change.lt(-0.10);
+
+Map.addLayer(evi_decline, {min: 0, max: 1, palette: ['white', 'red']}, 'EVI decline > 0.10');
+
+
+//SUMMARY
+//The largest EVI declines are on the west side of the study area (western
+//Fresno and Kings counties and northwestern Kern County, around Huron,
+//Kettleman City, and Lost Hills) and in the old Tulare Lake bed. The declines
+//show up as whole, sharp-edged rectangular fields, and many fields that were
+//green in 2019 look like bare soil in the 2022 true color composite. The east
+//side of the valley and the orchard areas change much less, and the cities
+//(Fresno, Visalia, Bakersfield) show little change.
+//
+//This pattern most likely represents fallowing. West side growers depend
+//heavily on surface water deliveries, and when allocations were cut in 2022,
+//many fields were left unplanted. The field-by-field shape of the change shows that this is a land management
+//decision, not gradual drought stress on the vegetation, which would look
+//more spread out.
 
 ```
