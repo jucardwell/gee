@@ -1248,14 +1248,17 @@ After completing this tutorial you should be able to:
 //To reduce this image across North Carolina counties, we will use the
 //following syntax
 
-//var projection = dem.projection();
+//var proj = IMAGE.projection(); // if reducing a raw image, use the image itself
+//var proj = COLLECTION.first().projection(); // if reducing a composite (median, mean, mosaic), use the original collection instead
 
-//the scale should be the pixel resolution of the dataset
+//dem is a raw image, so we use the image itself
+//var proj = dem.projection();
+
 // var nc_county_elevation = dem.reduceRegions({
-//   collection: table,
-//   reducer: ee.Reducer.mean(),
-//   scale: projection.nominalScale(),
-//   crs: projection
+//   collection: table, //the features you want to summarize into
+//   reducer: ee.Reducer.mean(), //the summary you want for each feature
+//   scale: proj.nominalScale().getInfo(), //pixel size, pulled from the image
+//   crs: proj.wkt().getInfo() //coordinate reference system, pulled from the image
 // });
 
 
@@ -1291,14 +1294,16 @@ After completing this tutorial you should be able to:
 //add this image to the map using appropriate visualization parameters
 
 
-
 //Now reduce that image to the North Carolina counties and export your
 //results. Notice that this requires you to use another reducer. 
+
+//Remember that your composite does not keep the native projection, so
+//get proj from the original collection, not from the composite.
 
 //This reducer can be the same one you used to create the composite
 //or it can be a different one. For instance, you can composite the 
 //mean but decide to take the max when reducing to regions.
-//What that returns is the max average value in each region. 
+//What that returns is the max average value in each region.
 ```
 
 ## Tutorial 14: Classification
