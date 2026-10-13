@@ -1485,3 +1485,192 @@ Map.addLayer(Kclassified.randomVisualizer(), {},
 //Did each cluster match up neatly with one land cover type?
 
 ```
+
+## Tutorial 15: Regression
+
+
+``` javascript
+// EXAMPLE RUN THROUGH
+//Predicting tree canopy cover in western North Carolina, summer 2023
+//in this example we are using surface reflectance bands in Landsat 8 to predict tree canopy cover
+
+
+//study area
+var studyarea = ee.Geometry.Rectangle([-83.1, 35.3, -82.2, 35.8]);
+
+
+//Get DEPENDENT VARIABLE (Y). 
+// this is usfs tree canopy cover as a percent (30 meters)
+var tcc = ee.ImageCollection('projects/gtac-data-publish/assets/TCC/Product_Version/2025-6')
+                            .filterDate('2023-01-01', '2024-01-01')
+                            .filter(ee.Filter.eq('study_area', 'CONUS'))
+                            .first()
+                            .select('NLCD_Percent_Tree_Canopy_Cover')
+                            .clip(studyarea);
+
+//create visualizatoin parameters so that we can use it later
+var tccVis = {min: 0, max: 100, palette: ['white', 'darkgreen']};
+
+Map.addLayer(tcc, tccVis, 'Tree canopy cover (actual)');
+
+
+//define cloud mask function for Landsat 8/9 Collection 2 Level 2
+function maskLandsatClouds(image) {
+  // Select the QA band that stores per-pixel quality flags
+  var qa = image.select('QA_PIXEL');
+  // Bit 1 = dilated cloud, 2 = cirrus, 3 = cloud, 4 = cloud shadow
+  var badBits = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4);
+  // A pixel is clear if NONE of those bits are turned on
+  var clear = qa.bitwiseAnd(badBits).eq(0);
+  // Keep the clear pixels, drop everything else
+  return image.updateMask(clear);
+}
+
+
+//filter data for the independent variables (x)
+var landsat = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+                            .filterBounds(studyarea)
+                            .filterDate('2023-06-01', '2023-09-01');
+
+//save the native Landsat projection BEFORE compositing
+var proj = ee.Image(landsat.first()).projection();
+var scale = proj.nominalScale().getInfo();
+var crs = proj.wkt().getInfo();
+
+//list the surface reflectance bands we will use as predictors
+var predictionBands = ['SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7'];
+
+//apply cloud mask, take median, select bands, clip
+var composite = landsat.map(maskLandsatClouds)
+                       .median()
+                       .select(predictionBands)
+                       .clip(studyarea);
+
+//apply scale and offset
+composite = composite.multiply(0.0000275).add(-0.2);
+
+
+//Q1. What is the dependent variable (y) in this regression?
+//    What are the independent variables (x)?
+//Q2. Why would these x be related to y?
+
+
+//LINEAR REGRESSION
+
+//stack the bands into one image: a constant, then the x bands, then y
+//the constant (a band of 1s) lets the regression find an intercept
+var trainingImageLR = ee.Image(1)
+                        .addBands(composite)
+                        .addBands(tcc);
+
+//run the linear regression over every pixel in the study area
+//numX = number of x bands, counting the constant (1 + 6 = 7)
+//numY = number of y bands (1)
+var linearRegression = trainingImageLR.reduceRegion({
+  reducer: ee.Reducer.linearRegression({numX: 7, numY: 1}),
+  geometry: studyarea,
+  scale: scale,
+  crs: crs,
+  maxPixels: 1e9
+});
+
+//pull the coefficients out of the results
+var coefficients = ee.Array(linearRegression.get('coefficients'))
+                     .project([0])
+                     .toList();
+
+print(coefficients);
+
+//multiply each band by its coefficient and add them up for every pixel
+var predictedLR = ee.Image(1)
+                    .addBands(composite)
+                    .multiply(ee.Image.constant(coefficients))
+                    .reduce(ee.Reducer.sum())
+                    .rename('LR_prediction');
+
+Map.addLayer(predictedLR, tccVis, 'Linear regression prediction');
+
+//Q3. How many coefficients are there? Why is it one more than the
+//    number of Landsat bands?
+//Q4. Use the Inspector to click on a few pixels. How close is the
+//    predicted tree canopy cover to the actual tree canopy cover?
+
+
+//RANDOM FOREST REGRESSION
+
+//stack the bands into one image: the x bands, then y (no constant needed)
+var trainingImageRF = composite.addBands(tcc);
+
+//sample 1,500 random pixels to use as training data
+var trainingData = trainingImageRF.sample({
+  region: studyarea,
+  scale: scale,
+  numPixels: 1500,
+  seed: 5
+});
+
+//train a random forest with 50 trees
+//setOutputMode('REGRESSION') makes it predict a number instead of a class
+var rfRegression = ee.Classifier.smileRandomForest(50)
+                       .setOutputMode('REGRESSION')
+                       .train({
+                         features: trainingData,
+                         classProperty: 'NLCD_Percent_Tree_Canopy_Cover',
+                         inputProperties: predictionBands
+                       });
+
+//run every pixel through the trees
+var predictedRF = composite.classify(rfRegression).rename('RF_prediction');
+
+Map.addLayer(predictedRF, tccVis, 'Random forest prediction');
+
+//ROOT MEAN SQUARE ERROR (RMSE)
+
+//define function to calculate RMSE for a prediction
+function calcRMSE(prediction) {
+  // Difference between predicted and actual, squared
+  var squaredError = prediction.subtract(tcc).pow(2).rename('squared_error');
+  // Average the squared error across the study area
+  var meanSquaredError = squaredError.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: studyarea,
+    scale: scale,
+    crs: crs,
+    maxPixels: 1e9
+  }).get('squared_error');
+  // Take the square root of the average
+  return ee.Number(meanSquaredError).sqrt();
+}
+
+print('RMSE, linear regression:', calcRMSE(predictedLR));
+print('RMSE, random forest:', calcRMSE(predictedRF));
+
+//Q6. What units is RMSE in?
+//Q7. Which model has the lower RMSE?
+
+
+//////////////////////////////////////////////////////////////
+//PART 2: MINI-WORKSHOP
+//////////////////////////////////////////////////////////////
+
+//Predict percent impervious surface in the Triangle (Chapel Hill, Durham,
+//and Raleigh) in 2021.
+//
+//Study area: ee.Geometry.Rectangle([-79.15, 35.70, -78.50, 36.10])
+//
+//Dependent variable (y): the impervious band from NLCD 2021
+//var image = ee.Image('USGS/NLCD_RELEASES/2021_REL/NLCD/2021').select('impervious')
+//
+//Independent variables (x): a Landsat 8 surface reflectance composite from
+//June through August 2021. Mask clouds, take the median, and apply the
+//scale and offset.
+//
+//1. Run a linear regression using the Landsat bands.
+//2. Run a random forest regression using the Landsat bands.
+//3. Calculate RMSE for both models.
+//
+//  Which model has the lower RMSE?
+//  Pick one pixel in downtown Durham. What did each model predict there,
+//  and what is the actual value?
+
+```
