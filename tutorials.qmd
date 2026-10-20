@@ -1679,19 +1679,16 @@ print('RMSE, random forest:', calcRMSE(predictedRF));
 
 ``` javascript
 
-//So far, we have mostly turned image collections into a single image (a composite).
-//Today we are going to keep the images separate and look at them in time order.
-//This is called a time series.
+//So far, we have mostly turned image collections into a single //image (a composite).Now we are going t o keep the images separae // and look at them in time order. This is called a time series.
 
 //A time series is a sequence of measurements of the same place, in time order.
 
-
 //PART 1: Charting a time series
 
-//Let's start with daytime land surface temperature (LST) from MODIS.
+//Use daytime land surface temperature (LST) from MODIS
 //https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD11A2
 
-//Here is a point in downtown Raleigh
+// point in downtown Raleigh
 var raleigh = ee.Geometry.Point([-78.6382, 35.7796]);
 
 var lst = ee.ImageCollection('MODIS/061/MOD11A2')
@@ -1709,8 +1706,8 @@ var lst = ee.ImageCollection('MODIS/061/MOD11A2')
 // }
 
 
-//To chart a time series, we use ui.Chart.image.series. This pulls the value at your
-//point from every image and plots it by date.
+//To chart a time series, we use ui.Chart.image.series. This pulls the value at your point from every image and plots it by date.
+//Remeber that it can only work on a single pixel or regional aggregation
 
 //uncomment the chart below once you have made lstF
 
@@ -1726,27 +1723,24 @@ var lst = ee.ImageCollection('MODIS/061/MOD11A2')
 // });
 // print(lstChart);
 
-//Look at your chart.
-//1. When is Raleigh hottest? Coolest?
-//3. Can you tell by looking whether Raleigh is getting hotter over these six years?
+//When is Raleigh hottest? Coolest?
+//Can you tell by looking whether Raleigh is getting hotter over these six years?
 
-//Now chart LST at a second point somewhere outside the city (a forest, a farm,
-//Jordan Lake). How is it different from downtown?
-
+//Now chart LST at a second point somewhere outside the city (a forest, a farm, Jordan Lake). How is it different from downtown?
 
 
 //PART 2: Aggregation and trend
 
-//lets look at VIIRS nighttime lights. This measures light at
+//Use VIIRS nighttime lights. This measures light at
 //night, which is often used to track urban growth.
 //https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG
 
-//Visit the catalog page.
+//Visit the catalog page
 //What are the units of avg_rad?
 //What is the pixel size?
 //How often is a new image produced?
 
-//The Triangle
+//Triangle region
 var triangle = ee.Geometry.Rectangle([-79.2, 35.5, -78.4, 36.1]);
 Map.centerObject(triangle, 10);
 
@@ -1754,8 +1748,7 @@ var viirs = ee.ImageCollection('NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG')
   .filterBounds(triangle)
   .select('avg_rad');
 
-//Monthly images are noisy, and we care about change from year to year. So we will
-//make one composite per year. This is called temporal aggregation.
+//Monthly images are noisy, and we care about change from year to year. So we will make one composite per year. This is called temporal aggregation.
 
 //We also add a band with the year in it. We need that for the trend.
 
@@ -1788,24 +1781,22 @@ Map.addLayer(trend.select('scale').clip(triangle), {
     palette: ['blue', 'white', 'red']
 }, 'Nighttime lights trend');
 
-//1. Where are the lights getting brighter? Zoom in. What is there?
-//2. Use the Inspector to click a red pixel. What is the slope? Write it out in words:
-//   "this pixel got ___ brighter per year".
-//3. Downtown Durham and Raleigh are blue. Did these places really get darker?
-//   What else could make a city look dimmer to a satellite?
+//Where are the lights getting brighter? Zoom in. What is there?
+//Use the Inspector to click a red pixel and interpret the value
+
+//How to read the slope:
+//The units are the units of the data PER YEAR. avg_rad is in nW/cm²/sr,
+//so a slope of 0.3 means this pixel got 0.3 nW/cm²/sr brighter every year.
 
 //Drop a point on a red area and call it "bright". Chart the annual avg_rad at
 //that point using ui.Chart.image.series. Use a scale of 463.83
 //Do the points fall close to a straight line?
 
-
-
 //PART 3: Anomalies
 
-//A trend asks "is it going up or down?"
 //An anomaly asks "how unusual was this period compared to normal for that time of year?"
 
-//Let's use CHIRPS daily rainfall to look at Hurricane Helene
+//Use CHIRPS daily rainfall to look at Hurricane Helene
 //https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY
 
 //What are the units? What is the pixel size?
@@ -1827,22 +1818,13 @@ var normal = chirps
   .sum()
   .divide(30);
 
-//1. Calculate the anomaly as a difference (September 2024 minus normal) and add it
-//   to the map, clipped to nc. Use this visualization so white = normal:
-//   {min: -300, max: 300, palette: ['brown', 'white', 'blue']}
+//Calculate the anomaly as a difference (September 2024 minus normal) and add it to the map, clipped to nc. Use this visualization so white = normal:
+//{min: -300, max: 300, palette: ['brown', 'white', 'blue']}
 
 
-//2. Calculate September 2024 as a percent of normal and add it to the map.
-//   Use this visualization so white = 100% (normal):
-//   {min: 0, max: 400, palette: ['brown', 'white', 'lightblue', 'blue', 'purple']}
-
-
-//3. Use the Inspector to click Asheville and Wilmington on both maps.
-//   Which place got more rain? Which place was more unusual? Why are those different?
-
-//4. Why do we compare to other Septembers, instead of to the average of all months?
-
-
+//Calculate September 2024 as a percent of normal and add it to the map.
+//Use this visualization so white = 100% (normal):
+//{min: 0, max: 400, palette: ['brown', 'white', 'lightblue', 'blue', 'purple']}
 
 //MINI-CHALLENGE: Sentinel-5P nitrogen dioxide (NO2)
 //https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_OFFL_L3_NO2
@@ -1895,8 +1877,7 @@ var l8 = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
 var before = l8.filterDate('2016-06-01', '2016-10-01').median().clip(partyRock);
 var after = l8.filterDate('2017-06-01', '2017-10-01').median().clip(partyRock);
 
-//A false color with SWIR2, NIR, and red. Notice the different min/max for each band
-//(remember Tutorial 9?)
+//false color with SWIR2, NIR, and red. 
 var vis = {
     bands: ['SR_B7', 'SR_B5', 'SR_B4'],
     min: [0, 0, 0],
@@ -1907,18 +1888,15 @@ Map.addLayer(after, vis, 'After (summer 2017)');
 
 //Can you find the burn scar?
 
-
-//The Normalized Burn Ratio (NBR) compares NIR (healthy leaves reflect a lot)
-//to SWIR2 (burned and dry surfaces reflect a lot).
+//The Normalized Burn Ratio (NBR) compares NIR (healthy leaves reflect a lot) to SWIR2 (burned and dry surfaces reflect a lot).
 //For Landsat 8: NIR = SR_B5, SWIR2 = SR_B7
 
-//1. Calculate NBR for before and after using normalizedDifference().
-//   Call them nbrBefore and nbrAfter.
+//calculate NBR for before and after using normalizedDifference().
+//call them nbrBefore and nbrAfter.
 
-
-//2. dNBR is before minus after. Burned areas lose NBR, so they come out POSITIVE.
-//   Calculate dNBR and add it to the map using:
-//   {min: 0, max: 0.7, palette: ['white', 'yellow', 'orange', 'red', 'darkred']}
+//dNBR is before minus after. Burned areas lose NBR, so they come out POSITIVE.
+//Calculate dNBR and add it to the map using:
+//{min: 0, max: 0.7, palette: ['white', 'yellow', 'orange', 'red', 'darkred']}
 
 
 //Researchers have published dNBR thresholds for burn severity:
@@ -1931,13 +1909,10 @@ Map.addLayer(after, vis, 'After (summer 2017)');
 //3. Using .where() (from Tutorial 10), create a severity image with classes
 //   0 (unburned) through 4 (high) and add it to the map.
 
-
 //4. Make two more layers: dNBR.gte(0.1) and dNBR.gte(0.27). 
 //   How different are they? Which one would you report as "burned"? Why?
 
-//5. Do you see change outside the burn scar? Look near Lake Lure. What else
-//   could make NBR change between two summers?
-
+//5. Do you see change outside the burn scar? Look near Lake Lure. What else could make NBR change between two summers?
 
 
 //PART 2: Post-classification comparison
@@ -1945,18 +1920,14 @@ Map.addLayer(after, vis, 'After (summer 2017)');
 //Differencing tells you HOW MUCH something changed. It does not tell you what it
 //changed FROM and TO. For that, we compare two classified maps.
 
-//Instead of training our own classifier, we'll use Dynamic World, a land cover
-//classification of every Sentinel-2 image.
+//Instead of training our own classifier, we'll use Dynamic World, a land cover classification of every Sentinel-2 image.
 //https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1
 
-//Visit the catalog page. What do the values of the 'label' band mean?
-//When does the dataset start?
+//Visit the catalog page. What do the values of the 'label' band //mean? When does the dataset start?
 
-//Using the polygon tool, draw a polygon around a fast-growing area (Apex, Holly
-//Springs, Fuquay-Varina, or Chatham Park in Pittsboro). Name it "growth".
+//Using the polygon tool, draw a polygon around a fast-growing area (Apex, Holly Springs, Fuquay-Varina, or Chatham Park in Pittsboro). //Name it "growth".
 
-//Every Sentinel-2 image has its own classification, so we composite each year
-//using the MODE (the most common class at each pixel).
+//Every Sentinel-2 image has its own classification, so we //composite each year using the MODE (the most common class at each //pixel).
 
 //uncomment once you have drawn "growth"
 
@@ -1986,11 +1957,11 @@ Map.addLayer(after, vis, 'After (summer 2017)');
 // var treesToBuilt = transitions.eq(16);
 // Map.addLayer(treesToBuilt.updateMask(treesToBuilt), {palette: ['red']}, 'Trees to built');
 
-//1. Where did trees become built? Does it match what you see on the satellite basemap?
+//Where did trees become built? Does it match what you see on the satellite basemap?
 
-//2. What code would crops (4) to built (6) be? Make a layer for it.
+//What code would crops (4) to built (6) be? Make a layer for it.
 
-//3. Look for transitions that make NO sense (for example, built to trees).
-//   Zoom in on one. Why might it show up?
+//Look for transitions that don't make sense. 
+//Why might it show up?
 
 ```
