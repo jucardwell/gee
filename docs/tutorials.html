@@ -205,6 +205,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#tutorial-13-reducers" id="toc-tutorial-13-reducers" class="nav-link" data-scroll-target="#tutorial-13-reducers"><span class="header-section-number">5.13</span> Tutorial 13: Reducers</a></li>
   <li><a href="#tutorial-14-classification" id="toc-tutorial-14-classification" class="nav-link" data-scroll-target="#tutorial-14-classification"><span class="header-section-number">5.14</span> Tutorial 14: Classification</a></li>
   <li><a href="#tutorial-15-regression" id="toc-tutorial-15-regression" class="nav-link" data-scroll-target="#tutorial-15-regression"><span class="header-section-number">5.15</span> Tutorial 15: Regression</a></li>
+  <li><a href="#tutorial-16-time-series" id="toc-tutorial-16-time-series" class="nav-link" data-scroll-target="#tutorial-16-time-series"><span class="header-section-number">5.16</span> Tutorial 16: Time Series</a></li>
+  <li><a href="#tutorial-17-change-detection" id="toc-tutorial-17-change-detection" class="nav-link" data-scroll-target="#tutorial-17-change-detection"><span class="header-section-number">5.17</span> Tutorial 17: Change Detection</a></li>
   </ul>
 </nav>
     </div>
@@ -1868,6 +1870,321 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-180"><a href="#cb15-180" aria-hidden="true" tabindex="-1"></a><span class="co">//  Which model has the lower RMSE?</span></span>
 <span id="cb15-181"><a href="#cb15-181" aria-hidden="true" tabindex="-1"></a><span class="co">//  Pick one pixel in downtown Durham. What did each model predict there,</span></span>
 <span id="cb15-182"><a href="#cb15-182" aria-hidden="true" tabindex="-1"></a><span class="co">//  and what is the actual value?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="tutorial-16-time-series" class="level2" data-number="5.16">
+<h2 data-number="5.16" class="anchored" data-anchor-id="tutorial-16-time-series"><span class="header-section-number">5.16</span> Tutorial 16: Time Series</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">//So far, we have mostly turned image collections into a single image (a composite).</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">//Today we are going to keep the images separate and look at them in time order.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">//This is called a time series.</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">//A time series is a sequence of measurements of the same place, in time order.</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">//PART 1: Charting a time series</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">//Let's start with daytime land surface temperature (LST) from MODIS.</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD11A2</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">//Here is a point in downtown Raleigh</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> raleigh <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Point</span>([<span class="op">-</span><span class="fl">78.6382</span><span class="op">,</span> <span class="fl">35.7796</span>])<span class="op">;</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> lst <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'MODIS/061/MOD11A2'</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(raleigh)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2019-01-01'</span><span class="op">,</span> <span class="st">'2025-01-01'</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">'LST_Day_1km'</span>)<span class="op">;</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">//Write a function that converts LST to Fahrenheit and adds it as a new band</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">//called 'LST_F'. Then map it over the collectooin </span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co">//Kelvin = value * 0.02, Celsius = Kelvin - 273.15, F = C * 1.8 + 32</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co">// function toFahrenheit(image) {</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="co">//   var f = ...;</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="co">//   return ...;</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="co">//To chart a time series, we use ui.Chart.image.series. This pulls the value at your</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="co">//point from every image and plots it by date.</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="co">//uncomment the chart below once you have made lstF</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="co">// var lstChart = ui.Chart.image.series({</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co">//   imageCollection: lstF.select('LST_F'),  //the band you want to chart</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co">//   region: raleigh,                        //where to measure it</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="co">//   reducer: ee.Reducer.mean(),             //how to summarize the pixels in the region</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="co">//   scale: 1000                             //pixel size, from the catalog page</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="co">// }).setOptions({</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="co">//   title: 'Daytime LST, downtown Raleigh',</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="co">//   vAxis: {title: 'LST (F)'},</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="co">//   pointSize: 3</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="co">// });</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a><span class="co">// print(lstChart);</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="co">//Look at your chart.</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co">//1. When is Raleigh hottest? Coolest?</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="co">//3. Can you tell by looking whether Raleigh is getting hotter over these six years?</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co">//Now chart LST at a second point somewhere outside the city (a forest, a farm,</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co">//Jordan Lake). How is it different from downtown?</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="co">//PART 2: Aggregation and trend</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="co">//lets look at VIIRS nighttime lights. This measures light at</span></span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a><span class="co">//night, which is often used to track urban growth.</span></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/NOAA_VIIRS_DNB_MONTHLY_V1_VCMSLCFG</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a><span class="co">//Visit the catalog page.</span></span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a><span class="co">//What are the units of avg_rad?</span></span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a><span class="co">//What is the pixel size?</span></span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a><span class="co">//How often is a new image produced?</span></span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="co">//The Triangle</span></span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> triangle <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Rectangle</span>([<span class="op">-</span><span class="fl">79.2</span><span class="op">,</span> <span class="fl">35.5</span><span class="op">,</span> <span class="op">-</span><span class="fl">78.4</span><span class="op">,</span> <span class="fl">36.1</span>])<span class="op">;</span></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">centerObject</span>(triangle<span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> viirs <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'NOAA/VIIRS/DNB/MONTHLY_V1/VCMSLCFG'</span>)</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(triangle)</span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">'avg_rad'</span>)<span class="op">;</span></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a><span class="co">//Monthly images are noisy, and we care about change from year to year. So we will</span></span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a><span class="co">//make one composite per year. This is called temporal aggregation.</span></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a><span class="co">//We also add a band with the year in it. We need that for the trend.</span></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a><span class="co">//a list of years</span></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> years <span class="op">=</span> ee<span class="op">.</span><span class="at">List</span><span class="op">.</span><span class="fu">sequence</span>(<span class="dv">2014</span><span class="op">,</span> <span class="dv">2024</span>)<span class="op">;</span></span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a><span class="co">//for each year, filter to that year, take the median, and add a year band</span></span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> annual <span class="op">=</span> ee<span class="op">.</span><span class="at">ImageCollection</span><span class="op">.</span><span class="fu">fromImages</span>(years<span class="op">.</span><span class="fu">map</span>(<span class="kw">function</span>(y) {</span>
+<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> start <span class="op">=</span> ee<span class="op">.</span><span class="at">Date</span><span class="op">.</span><span class="fu">fromYMD</span>(y<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> lights <span class="op">=</span> viirs<span class="op">.</span><span class="fu">filterDate</span>(start<span class="op">,</span> start<span class="op">.</span><span class="fu">advance</span>(<span class="dv">1</span><span class="op">,</span> <span class="st">'year'</span>))<span class="op">.</span><span class="fu">median</span>()<span class="op">;</span></span>
+<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> yearBand <span class="op">=</span> ee<span class="op">.</span><span class="at">Image</span><span class="op">.</span><span class="fu">constant</span>(y)<span class="op">.</span><span class="fu">rename</span>(<span class="st">'year'</span>)<span class="op">.</span><span class="fu">float</span>()<span class="op">;</span></span>
+<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> yearBand<span class="op">.</span><span class="fu">addBands</span>(lights)</span>
+<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">set</span>(<span class="st">'system:time_start'</span><span class="op">,</span> start<span class="op">.</span><span class="fu">millis</span>())<span class="op">;</span></span>
+<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a>}))<span class="op">;</span></span>
+<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a><span class="co">//print annual. How many images are there? What bands are in each image?</span></span>
+<span id="cb16-95"><a href="#cb16-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-96"><a href="#cb16-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="co">//To fit a trend line at every pixel, we use ee.Reducer.linearFit().</span></span>
+<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a><span class="co">//It needs two bands in this order: first the year (x), then the value (y).</span></span>
+<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a><span class="co">//It returns two bands:</span></span>
+<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a><span class="co">//  scale = the slope (how much the value changes per year)</span></span>
+<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a><span class="co">//  offset = the intercept</span></span>
+<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> trend <span class="op">=</span> annual<span class="op">.</span><span class="fu">reduce</span>(ee<span class="op">.</span><span class="at">Reducer</span><span class="op">.</span><span class="fu">linearFit</span>())<span class="op">;</span></span>
+<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-105"><a href="#cb16-105" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">addLayer</span>(trend<span class="op">.</span><span class="fu">select</span>(<span class="st">'scale'</span>)<span class="op">.</span><span class="fu">clip</span>(triangle)<span class="op">,</span> {</span>
+<span id="cb16-106"><a href="#cb16-106" aria-hidden="true" tabindex="-1"></a>    <span class="dt">min</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.5</span><span class="op">,</span></span>
+<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a>    <span class="dt">max</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span></span>
+<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a>    <span class="dt">palette</span><span class="op">:</span> [<span class="st">'blue'</span><span class="op">,</span> <span class="st">'white'</span><span class="op">,</span> <span class="st">'red'</span>]</span>
+<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a>}<span class="op">,</span> <span class="st">'Nighttime lights trend'</span>)<span class="op">;</span></span>
+<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a><span class="co">//1. Where are the lights getting brighter? Zoom in. What is there?</span></span>
+<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a><span class="co">//2. Use the Inspector to click a red pixel. What is the slope? Write it out in words:</span></span>
+<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a><span class="co">//   "this pixel got ___ brighter per year".</span></span>
+<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a><span class="co">//3. Downtown Durham and Raleigh are blue. Did these places really get darker?</span></span>
+<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a><span class="co">//   What else could make a city look dimmer to a satellite?</span></span>
+<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a><span class="co">//Drop a point on a red area and call it "bright". Chart the annual avg_rad at</span></span>
+<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a><span class="co">//that point using ui.Chart.image.series. Use a scale of 463.83</span></span>
+<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a><span class="co">//Do the points fall close to a straight line?</span></span>
+<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a><span class="co">//PART 3: Anomalies</span></span>
+<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a><span class="co">//A trend asks "is it going up or down?"</span></span>
+<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a><span class="co">//An anomaly asks "how unusual was this period compared to normal for that time of year?"</span></span>
+<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a><span class="co">//Let's use CHIRPS daily rainfall to look at Hurricane Helene</span></span>
+<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY</span></span>
+<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-131"><a href="#cb16-131" aria-hidden="true" tabindex="-1"></a><span class="co">//What are the units? What is the pixel size?</span></span>
+<span id="cb16-132"><a href="#cb16-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a><span class="co">//region of interest for nc</span></span>
+<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> nc <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Rectangle</span>([<span class="op">-</span><span class="fl">84.3219</span><span class="op">,</span> <span class="fl">33.7529</span><span class="op">,</span> <span class="op">-</span><span class="fl">75.4606</span><span class="op">,</span> <span class="fl">36.5880</span>])<span class="op">;</span></span>
+<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> chirps <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'UCSB-CHG/CHIRPS/DAILY'</span>)<span class="op">.</span><span class="fu">select</span>(<span class="st">'precipitation'</span>)<span class="op">;</span></span>
+<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a><span class="co">//total rain in September 2024</span></span>
+<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> sept2024 <span class="op">=</span> chirps<span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2024-09-01'</span><span class="op">,</span> <span class="st">'2024-10-01'</span>)<span class="op">.</span><span class="fu">sum</span>()<span class="op">;</span></span>
+<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a><span class="co">//the baseline: the average September from 1994-2023</span></span>
+<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a><span class="co">//calendarRange(9, 9, 'month') keeps only the days in September, from every year.</span></span>
+<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a><span class="co">//Summing 30 Septembers and dividing by 30 gives the average September.</span></span>
+<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> normal <span class="op">=</span> chirps</span>
+<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'1994-01-01'</span><span class="op">,</span> <span class="st">'2024-01-01'</span>)</span>
+<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filter</span>(ee<span class="op">.</span><span class="at">Filter</span><span class="op">.</span><span class="fu">calendarRange</span>(<span class="dv">9</span><span class="op">,</span> <span class="dv">9</span><span class="op">,</span> <span class="st">'month'</span>))</span>
+<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">sum</span>()</span>
+<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">divide</span>(<span class="dv">30</span>)<span class="op">;</span></span>
+<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a><span class="co">//1. Calculate the anomaly as a difference (September 2024 minus normal) and add it</span></span>
+<span id="cb16-151"><a href="#cb16-151" aria-hidden="true" tabindex="-1"></a><span class="co">//   to the map, clipped to nc. Use this visualization so white = normal:</span></span>
+<span id="cb16-152"><a href="#cb16-152" aria-hidden="true" tabindex="-1"></a><span class="co">//   {min: -300, max: 300, palette: ['brown', 'white', 'blue']}</span></span>
+<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a><span class="co">//2. Calculate September 2024 as a percent of normal and add it to the map.</span></span>
+<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a><span class="co">//   Use this visualization so white = 100% (normal):</span></span>
+<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a><span class="co">//   {min: 0, max: 400, palette: ['brown', 'white', 'lightblue', 'blue', 'purple']}</span></span>
+<span id="cb16-158"><a href="#cb16-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-159"><a href="#cb16-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-160"><a href="#cb16-160" aria-hidden="true" tabindex="-1"></a><span class="co">//3. Use the Inspector to click Asheville and Wilmington on both maps.</span></span>
+<span id="cb16-161"><a href="#cb16-161" aria-hidden="true" tabindex="-1"></a><span class="co">//   Which place got more rain? Which place was more unusual? Why are those different?</span></span>
+<span id="cb16-162"><a href="#cb16-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-163"><a href="#cb16-163" aria-hidden="true" tabindex="-1"></a><span class="co">//4. Why do we compare to other Septembers, instead of to the average of all months?</span></span>
+<span id="cb16-164"><a href="#cb16-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-165"><a href="#cb16-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-166"><a href="#cb16-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-167"><a href="#cb16-167" aria-hidden="true" tabindex="-1"></a><span class="co">//MINI-CHALLENGE: Sentinel-5P nitrogen dioxide (NO2)</span></span>
+<span id="cb16-168"><a href="#cb16-168" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S5P_OFFL_L3_NO2</span></span>
+<span id="cb16-169"><a href="#cb16-169" aria-hidden="true" tabindex="-1"></a><span class="co">//NO2 comes mostly from burning fuel (cars, trucks, power plants).</span></span>
+<span id="cb16-170"><a href="#cb16-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-171"><a href="#cb16-171" aria-hidden="true" tabindex="-1"></a><span class="co">//Using the 'tropospheric_NO2_column_number_density' band, make one composite per</span></span>
+<span id="cb16-172"><a href="#cb16-172" aria-hidden="true" tabindex="-1"></a><span class="co">//MONTH over Charlotte from 2019 through 2024 and chart it.</span></span>
+<span id="cb16-173"><a href="#cb16-173" aria-hidden="true" tabindex="-1"></a><span class="co">//hint: copy the pattern from Part 2, but step through months instead of years</span></span>
+<span id="cb16-174"><a href="#cb16-174" aria-hidden="true" tabindex="-1"></a><span class="co">//(ee.List.sequence(0, 71) and start.advance(m, 'month'))</span></span>
+<span id="cb16-175"><a href="#cb16-175" aria-hidden="true" tabindex="-1"></a><span class="co">//Use a scale of 1113.2</span></span>
+<span id="cb16-176"><a href="#cb16-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-177"><a href="#cb16-177" aria-hidden="true" tabindex="-1"></a><span class="co">//Is there a seasonal pattern? Can you see spring 2020?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="tutorial-17-change-detection" class="level2" data-number="5.17">
+<h2 data-number="5.17" class="anchored" data-anchor-id="tutorial-17-change-detection"><span class="header-section-number">5.17</span> Tutorial 17: Change Detection</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">//Change detection asks WHERE something changed and HOW MUCH.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">//PART 1: Image differencing</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">//The Party Rock fire burned near Lake Lure in November 2016.</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> partyRock <span class="op">=</span> ee<span class="op">.</span><span class="at">Geometry</span><span class="op">.</span><span class="fu">Rectangle</span>([<span class="op">-</span><span class="fl">82.30</span><span class="op">,</span> <span class="fl">35.425</span><span class="op">,</span> <span class="op">-</span><span class="fl">82.18</span><span class="op">,</span> <span class="fl">35.495</span>])<span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">centerObject</span>(partyRock<span class="op">,</span> <span class="dv">13</span>)<span class="op">;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">maskLandsatClouds</span>(image) {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Select the QA band that stores per-pixel quality flags</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> qa <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'QA_PIXEL'</span>)<span class="op">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Bit 1 = dilated cloud, 2 = cirrus, 3 = cloud, 4 = cloud shadow</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> badBits <span class="op">=</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">2</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">3</span>) <span class="op">|</span> (<span class="dv">1</span> <span class="op">&lt;&lt;</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// A pixel is clear if NONE of those bits are turned on</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> clear <span class="op">=</span> qa<span class="op">.</span><span class="fu">bitwiseAnd</span>(badBits)<span class="op">.</span><span class="fu">eq</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Keep the clear pixels, drop everything else</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image<span class="op">.</span><span class="fu">updateMask</span>(clear)<span class="op">;</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">scaleLandsat</span>(image) {</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> scaled <span class="op">=</span> image<span class="op">.</span><span class="fu">select</span>(<span class="st">'SR_B.'</span>)<span class="op">.</span><span class="fu">multiply</span>(<span class="fl">0.0000275</span>)<span class="op">.</span><span class="fu">add</span>(<span class="op">-</span><span class="fl">0.2</span>)<span class="op">;</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Replace the original bands with the scaled ones (true = overwrite)</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> image<span class="op">.</span><span class="fu">addBands</span>(scaled<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> l8 <span class="op">=</span> ee<span class="op">.</span><span class="fu">ImageCollection</span>(<span class="st">'LANDSAT/LC08/C02/T1_L2'</span>)</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">filterBounds</span>(partyRock)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">map</span>(maskLandsatClouds)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">map</span>(scaleLandsat)<span class="op">;</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="co">//Before and after composites. Notice both are SUMMER. Why does that matter?</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> before <span class="op">=</span> l8<span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2016-06-01'</span><span class="op">,</span> <span class="st">'2016-10-01'</span>)<span class="op">.</span><span class="fu">median</span>()<span class="op">.</span><span class="fu">clip</span>(partyRock)<span class="op">;</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> after <span class="op">=</span> l8<span class="op">.</span><span class="fu">filterDate</span>(<span class="st">'2017-06-01'</span><span class="op">,</span> <span class="st">'2017-10-01'</span>)<span class="op">.</span><span class="fu">median</span>()<span class="op">.</span><span class="fu">clip</span>(partyRock)<span class="op">;</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="co">//A false color with SWIR2, NIR, and red. Notice the different min/max for each band</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="co">//(remember Tutorial 9?)</span></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> vis <span class="op">=</span> {</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bands</span><span class="op">:</span> [<span class="st">'SR_B7'</span><span class="op">,</span> <span class="st">'SR_B5'</span><span class="op">,</span> <span class="st">'SR_B4'</span>]<span class="op">,</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>    <span class="dt">min</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    <span class="dt">max</span><span class="op">:</span> [<span class="fl">0.15</span><span class="op">,</span> <span class="fl">0.45</span><span class="op">,</span> <span class="fl">0.10</span>]</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">addLayer</span>(before<span class="op">,</span> vis<span class="op">,</span> <span class="st">'Before (summer 2016)'</span>)<span class="op">;</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">addLayer</span>(after<span class="op">,</span> vis<span class="op">,</span> <span class="st">'After (summer 2017)'</span>)<span class="op">;</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="co">//Can you find the burn scar?</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="co">//The Normalized Burn Ratio (NBR) compares NIR (healthy leaves reflect a lot)</span></span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="co">//to SWIR2 (burned and dry surfaces reflect a lot).</span></span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a><span class="co">//For Landsat 8: NIR = SR_B5, SWIR2 = SR_B7</span></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="co">//1. Calculate NBR for before and after using normalizedDifference().</span></span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a><span class="co">//   Call them nbrBefore and nbrAfter.</span></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="co">//2. dNBR is before minus after. Burned areas lose NBR, so they come out POSITIVE.</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a><span class="co">//   Calculate dNBR and add it to the map using:</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a><span class="co">//   {min: 0, max: 0.7, palette: ['white', 'yellow', 'orange', 'red', 'darkred']}</span></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a><span class="co">//Researchers have published dNBR thresholds for burn severity:</span></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a><span class="co">//  less than 0.1  = unburned</span></span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a><span class="co">//  0.1 to 0.27    = low severity</span></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="co">//  0.27 to 0.44   = moderate-low severity</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a><span class="co">//  0.44 to 0.66   = moderate-high severity</span></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="co">//  greater than 0.66 = high severity</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="co">//3. Using .where() (from Tutorial 10), create a severity image with classes</span></span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a><span class="co">//   0 (unburned) through 4 (high) and add it to the map.</span></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a><span class="co">//4. Make two more layers: dNBR.gte(0.1) and dNBR.gte(0.27). </span></span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a><span class="co">//   How different are they? Which one would you report as "burned"? Why?</span></span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a><span class="co">//5. Do you see change outside the burn scar? Look near Lake Lure. What else</span></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="co">//   could make NBR change between two summers?</span></span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a><span class="co">//PART 2: Post-classification comparison</span></span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a><span class="co">//Differencing tells you HOW MUCH something changed. It does not tell you what it</span></span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a><span class="co">//changed FROM and TO. For that, we compare two classified maps.</span></span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a><span class="co">//Instead of training our own classifier, we'll use Dynamic World, a land cover</span></span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a><span class="co">//classification of every Sentinel-2 image.</span></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a><span class="co">//https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_DYNAMICWORLD_V1</span></span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a><span class="co">//Visit the catalog page. What do the values of the 'label' band mean?</span></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a><span class="co">//When does the dataset start?</span></span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a><span class="co">//Using the polygon tool, draw a polygon around a fast-growing area (Apex, Holly</span></span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a><span class="co">//Springs, Fuquay-Varina, or Chatham Park in Pittsboro). Name it "growth".</span></span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a><span class="co">//Every Sentinel-2 image has its own classification, so we composite each year</span></span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a><span class="co">//using the MODE (the most common class at each pixel).</span></span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a><span class="co">//uncomment once you have drawn "growth"</span></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a><span class="co">// var dw = ee.ImageCollection('GOOGLE/DYNAMICWORLD/V1')</span></span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a><span class="co">//   .filterBounds(growth)</span></span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a><span class="co">//   .select('label');</span></span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="co">// var lc2016 = dw.filterDate('2016-01-01', '2017-01-01').mode().clip(growth);</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a><span class="co">// var lc2025 = dw.filterDate('2025-01-01', '2026-01-01').mode().clip(growth);</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a><span class="co">// //the Dynamic World colors, in class order 0 through 8</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a><span class="co">// var dwPalette = ['419bdf', '397d49', '88b053', '7a87c6', 'e49635',</span></span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a><span class="co">//                  'dfc35a', 'c4281b', 'a59b8f', 'b39fe1'];</span></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a><span class="co">// Map.addLayer(lc2016, {min: 0, max: 8, palette: dwPalette}, 'Land cover 2016');</span></span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a><span class="co">// Map.addLayer(lc2025, {min: 0, max: 8, palette: dwPalette}, 'Land cover 2025');</span></span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="co">//Now combine the two years into one "transition code":</span></span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a><span class="co">//  code = (2016 class * 10) + (2025 class)</span></span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a><span class="co">//So trees (1) to built (6) becomes 16. Built (6) that stayed built becomes 66.</span></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a><span class="co">//The tens digit is "from", the ones digit is "to".</span></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a><span class="co">// var transitions = lc2016.multiply(10).add(lc2025);</span></span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="co">// //pixels that went from trees to built</span></span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a><span class="co">// var treesToBuilt = transitions.eq(16);</span></span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a><span class="co">// Map.addLayer(treesToBuilt.updateMask(treesToBuilt), {palette: ['red']}, 'Trees to built');</span></span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a><span class="co">//1. Where did trees become built? Does it match what you see on the satellite basemap?</span></span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a><span class="co">//2. What code would crops (4) to built (6) be? Make a layer for it.</span></span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a><span class="co">//3. Look for transitions that make NO sense (for example, built to trees).</span></span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a><span class="co">//   Zoom in on one. Why might it show up?</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
