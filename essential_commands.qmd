@@ -23,6 +23,42 @@ var image_collection = ee.ImageCollection("image_collection_name");
 print(image_collection.first());
 ```
 
+### Accessing a Feature Collection
+
+```javascript
+// load an uploaded asset by its path
+// (or use the Imports button, where it comes in as "table")
+var feature_collection = ee.FeatureCollection('path/to/asset');
+
+// print the first feature to see its properties
+print(feature_collection.first());
+
+// keep only the features with a certain property value
+var subset = feature_collection.filter(ee.Filter.eq('property_name', 'value'));
+
+// add it to the map
+Map.addLayer(feature_collection, {color: 'red'}, 'Layer Name');
+```
+
+### Creating Geometries
+
+```javascript
+// a point
+var point = ee.Geometry.Point([lon, lat]);
+
+// a rectangle
+var rectangle = ee.Geometry.Rectangle([west, south, east, north]);
+
+// a polygon (first and last corner can be the same)
+var polygon = ee.Geometry.Polygon([[[lon_1, lat_1], [lon_2, lat_2], [lon_3, lat_3], [lon_4, lat_4]]]);
+
+// several geometries as one feature collection
+var points = ee.FeatureCollection([point_1, point_2, point_3]);
+
+// center the map on any geometry or feature collection (number is zoom level)
+Map.centerObject(roi, 10);
+```
+
 ## Filtering Image Collections
 
 ### Filter by a Date Range
@@ -100,6 +136,15 @@ var filtered_collection = image_collection.filter(
         ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', 20)
     )
 );
+```
+
+### Pick the Least Cloudy Image
+
+```javascript
+// sort by the cloud cover property, then take the first image
+var least_cloudy = image_collection
+    .sort('CLOUDY_PIXEL_PERCENTAGE')
+    .first();
 ```
 
 ## Visualization
@@ -272,6 +317,27 @@ var bands = image.select(['band_1', 'band_2', 'band_3']);
 var renamed = image.select('old_band_name').rename('new_band_name');
 ```
 
+## Scale and Offset
+
+Many datasets store values as integers to save space. Before any analysis, convert them back with the scale (and offset, if there is one). Every dataset lists its scale and offset on its catalog page, and nowhere in the image itself.
+
+```javascript
+// Sentinel-2 SR Harmonized: divide by 10000
+var scaled = image.divide(10000);
+
+// Landsat 8/9 Collection 2 Level 2: multiply by 0.0000275, then add -0.2
+// this only scales the surface reflectance bands (SR_B1 to SR_B7)
+function scaleLandsat(image) {
+  var scaled = image.select('SR_B.').multiply(0.0000275).add(-0.2);
+  return image.addBands(scaled, null, true);
+}
+
+var scaled_collection = image_collection.map(scaleLandsat);
+
+// MODIS LST (MOD11A2): multiply by 0.02 to get Kelvin, subtract 273.15 for Celsius
+var celsius = image.select('LST_Day_1km').multiply(0.02).subtract(273.15);
+```
+
 ## Band Math
 
 Band math allows you to create new raster bands by mathematically combining existing bands. Common operations include addition, subtraction, multiplication, division, and normalized differences.
@@ -311,6 +377,16 @@ var calculated_band = image.expression(
                     '(BAND_1 - BAND_2) / (BAND_1 + BAND_2)', 
                     { BAND_1: image.select('band_1'), 
                     BAND_2: image.select('band_2') });
+```
+
+### Add a Band to an Image
+
+```javascript
+// calculate a new band and give it a name
+var ndvi = image.normalizedDifference(['band_1', 'band_2']).rename('NDVI');
+
+// add it to the original image
+var with_ndvi = image.addBands(ndvi);
 ```
 
 ## Thresholds, Reclassifying, and Masking
@@ -453,6 +529,277 @@ var output = image.reduceRegions({
     crs: projection
 });
 
+```
+## Reducers
+
+### Reduce an Image Within One Region
+
+`reduceRegions()` (above) summarizes into every feature in a feature collection. `reduceRegion()` summarizes into a single geometry and returns a dictionary.
+
+```javascript
+var proj = image.projection(); // if reducing a raw image, use the image itself
+// var proj = COLLECTION.first().projection(); // if reducing a composite, use the original collection instead
+
+var stats = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: roi,
+    scale: proj.nominalScale(),
+    crs: proj,
+    maxPixels: 1e9
+});
+
+print(stats);
+```
+
+### Common Reducers
+
+```javascript
+ee.Reducer.mean()
+ee.Reducer.median()
+ee.Reducer.sum()
+ee.Reducer.min()
+ee.Reducer.max()
+
+// percentiles: returns one value per percentile (named p5 and p95 here)
+ee.Reducer.percentile([5, 95])
+```
+
+### Composite Categories with the Mode
+
+For categorical data like land cover, a median or mean would invent classes that don't exist. Use the mode, the most common value at each pixel.
+
+```javascript
+var composite = image_collection.mode();
+```
+
+## Classification
+
+### Supervised Classification
+
+Draw training polygons with the geometry tools. Import each class as a FeatureCollection with a property called 'class' (1, 2, 3, ...).
+
+```javascript
+// combine the training classes into one feature collection
+var training_features = ee.FeatureCollection([
+    class_1, class_2, class_3, class_4
+]).flatten();
+
+// the bands the classifier will use
+var prediction_bands = ['band_1', 'band_2', 'band_3'];
+
+// pull the band values from inside the training polygons
+var training = image.select(prediction_bands).sampleRegions({
+    collection: training_features,
+    properties: ['class'],
+    scale: 10
+});
+
+// train a classifier (CART)
+var classifier = ee.Classifier.smileCart().train({
+    features: training,
+    classProperty: 'class',
+    inputProperties: prediction_bands
+});
+
+// or a random forest with 50 trees
+// var classifier = ee.Classifier.smileRandomForest(50).train({ ...same as above... });
+
+// classify the image
+var classified = image.select(prediction_bands).classify(classifier);
+
+Map.addLayer(classified, {min: 1, max: 4, palette: ['blue', 'red', 'green', 'orange']}, 'Classified');
+```
+
+### Unsupervised Classification (k-means)
+
+```javascript
+// take a random sample of pixels
+var sample = image.select(prediction_bands).sample({
+    region: roi,
+    scale: 10,
+    numPixels: 1000
+});
+
+// group the pixels into 4 clusters
+var clusterer = ee.Clusterer.wekaKMeans(4).train(sample);
+var clustered = image.select(prediction_bands).cluster(clusterer);
+
+Map.addLayer(clustered.randomVisualizer(), {}, 'K-means clusters');
+```
+
+## Regression
+
+### Linear Regression
+
+```javascript
+var proj = image_collection.first().projection();
+
+// the image needs a band of 1s (for the intercept), then the predictors, then the response
+var training_image = ee.Image(1)
+    .addBands(predictors)
+    .addBands(response);
+
+// numX = number of predictor bands + 1 (for the band of 1s)
+var regression = training_image.reduceRegion({
+    reducer: ee.Reducer.linearRegression({numX: 7, numY: 1}),
+    geometry: roi,
+    scale: proj.nominalScale(),
+    crs: proj,
+    maxPixels: 1e9
+});
+
+// turn the coefficients into a list
+var coefficients = ee.Array(regression.get('coefficients'))
+    .project([0])
+    .toList();
+
+// predict: multiply each band by its coefficient and add them up
+var predicted = ee.Image(1)
+    .addBands(predictors)
+    .multiply(ee.Image.constant(coefficients))
+    .reduce(ee.Reducer.sum())
+    .rename('prediction');
+```
+
+### Random Forest Regression
+
+```javascript
+// sample pixels from an image with the predictor bands and the response band
+var training = predictors.addBands(response).sample({
+    region: roi,
+    scale: 30,
+    numPixels: 1500,
+    seed: 5
+});
+
+var rf = ee.Classifier.smileRandomForest(50)
+    .setOutputMode('REGRESSION')
+    .train({
+        features: training,
+        classProperty: 'response_band_name',
+        inputProperties: prediction_bands
+    });
+
+var predicted = predictors.classify(rf).rename('prediction');
+```
+
+### Root Mean Squared Error
+
+```javascript
+var squared_error = predicted.subtract(response).pow(2).rename('squared_error');
+
+var mse = squared_error.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    geometry: roi,
+    scale: 30,
+    maxPixels: 1e9
+}).get('squared_error');
+
+print('RMSE', ee.Number(mse).sqrt());
+```
+
+## Time Series
+
+### Chart a Time Series
+
+```javascript
+// works for a point, or a region summarized with the reducer
+var chart = ui.Chart.image.series({
+    imageCollection: image_collection.select('band_name'), // the band to chart
+    region: point,                                       // where to measure it
+    reducer: ee.Reducer.mean(),                          // how to summarize the region
+    scale: 30                                            // pixel size, from the catalog page
+}).setOptions({
+    title: 'Chart Title',
+    vAxis: {title: 'Units'},
+    pointSize: 3
+});
+
+print(chart);
+```
+
+### One Composite per Year
+
+```javascript
+var years = ee.List.sequence(2014, 2024);
+
+var annual = ee.ImageCollection.fromImages(years.map(function(y) {
+    var start = ee.Date.fromYMD(y, 1, 1);
+    var composite = image_collection.filterDate(start, start.advance(1, 'year')).median();
+    return composite.set('system:time_start', start.millis());
+}));
+
+// for one composite per month, step through months instead:
+// ee.List.sequence(0, 71) and start.advance(m, 'month')
+```
+
+### Linear Trend
+
+```javascript
+// each image needs two bands, in this order: year, then the value
+var annual = ee.ImageCollection.fromImages(years.map(function(y) {
+    var start = ee.Date.fromYMD(y, 1, 1);
+    var value = image_collection.filterDate(start, start.advance(1, 'year')).median();
+    var year_band = ee.Image.constant(y).rename('year').float();
+    return year_band.addBands(value).set('system:time_start', start.millis());
+}));
+
+// 'scale' is the slope (change per year), 'offset' is the intercept
+var trend = annual.reduce(ee.Reducer.linearFit());
+
+Map.addLayer(trend.select('scale'), {min: -0.5, max: 0.5, palette: ['blue', 'white', 'red']}, 'Trend');
+```
+
+### Anomaly
+
+```javascript
+// the period of interest
+var period = image_collection.filterDate('2024-09-01', '2024-10-01').sum();
+
+// the baseline: the same month across many years (here 30 Septembers)
+var normal = image_collection
+    .filterDate('1994-01-01', '2024-01-01')
+    .filter(ee.Filter.calendarRange(9, 9, 'month'))
+    .sum()
+    .divide(30);
+
+// difference from normal (original units)
+var difference = period.subtract(normal);
+
+// percent of normal (100 = normal)
+var percent = period.divide(normal).multiply(100);
+```
+
+## Change Detection
+
+### Image Differencing
+
+```javascript
+// same index, same season, two years
+var before_index = before.normalizedDifference(['band_1', 'band_2']);
+var after_index = after.normalizedDifference(['band_1', 'band_2']);
+
+// before minus after: a loss comes out positive
+var difference = before_index.subtract(after_index);
+
+// threshold the difference to separate change from noise
+var changed = difference.gte(threshold);
+```
+
+### Post-Classification Comparison
+
+```javascript
+// classify (or composite) each date into land cover
+var lc_before = image_collection.filterDate('2016-01-01', '2017-01-01').mode();
+var lc_after = image_collection.filterDate('2025-01-01', '2026-01-01').mode();
+
+// transition code: tens digit is "from", ones digit is "to"
+var transitions = lc_before.multiply(10).add(lc_after);
+
+// pixels that went from class 1 to class 6
+var one_to_six = transitions.eq(16);
+
+Map.addLayer(one_to_six.updateMask(one_to_six), {palette: ['red']}, 'Class 1 to class 6');
 ```
 
 ## Exporting Data
